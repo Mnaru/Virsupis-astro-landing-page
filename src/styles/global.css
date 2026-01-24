@@ -6,9 +6,9 @@
   --font-body: "Roboto", system-ui, sans-serif;
 
   --color-black: #161514;
-  --color-white: #f8f4ee;
-  --color-background: #f8f4ee;
-  --color-foreground: #161514;
+  --color-white: #000000;
+  --color-background: #000000;
+  --color-foreground: #f8f4ee;
   --color-accent: #0099ff;
   --color-muted: #888888;
   --color-border: #333333;
