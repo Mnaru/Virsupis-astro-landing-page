@@ -43,8 +43,8 @@
   @media (max-width: 768px) {
     html,
     body {
-      /* Prevent horizontal scroll */
-      overflow-x: hidden;
+      /* Use clip instead of hidden - hidden breaks sticky/fixed on iOS */
+      overflow-x: clip;
     }
   }
 }

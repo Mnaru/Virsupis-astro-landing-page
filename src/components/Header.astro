@@ -125,10 +125,13 @@ import NavButton from "./NavButton.astro";
   @media (max-width: 768px) {
     .header {
       position: fixed;
-      top: 0;
+      top: env(safe-area-inset-top, 0px);
       left: 0;
       right: 0;
       z-index: 100;
+      /* GPU compositing for iOS address bar tracking */
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
     }

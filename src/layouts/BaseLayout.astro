@@ -27,5 +27,7 @@ const { title, description = "Privatus namų kvartalas Vilniuje" } = Astro.props
   </head>
   <body>
     <slot />
+    <!-- iOS fix: invisible element helps browser track fixed elements during address bar resize -->
+    <div aria-hidden="true" style="position: fixed; top: 0; left: 0; width: 1px; height: 1px; pointer-events: none; opacity: 0;"></div>
   </body>
 </html>
