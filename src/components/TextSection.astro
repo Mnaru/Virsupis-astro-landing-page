@@ -1,0 +1,77 @@
+---
+interface Props {
+  highlight?: string;
+  content?: string;
+}
+
+const { highlight, content } = Astro.props;
+---
+
+<section class="text-section">
+  <div class="text-content">
+    {highlight && <p class="highlight-text">{highlight}</p>}
+    {content && <p class="body-text">{content}</p>}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .text-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 120px 80px;
+    background-color: var(--color-white, #f8f4ee);
+  }
+
+  .text-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    max-width: 425px;
+    text-align: left;
+  }
+
+  .highlight-text {
+    font-family: var(--font-body, "Roboto", sans-serif);
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    color: var(--color-black, #161514);
+    margin: 0;
+    width: 100%;
+  }
+
+  .body-text {
+    font-family: var(--font-body, "Roboto", sans-serif);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    color: var(--color-black, #161514);
+    margin: 0;
+    width: 100%;
+  }
+
+  /* Slot content styling */
+  .text-content :global(p) {
+    font-family: var(--font-body, "Roboto", sans-serif);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    color: var(--color-black, #161514);
+    margin: 0;
+    width: 100%;
+  }
+
+  .text-content :global(p:first-child) {
+    font-weight: 600;
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .text-section {
+      padding: 80px 16px;
+    }
+  }
+</style>

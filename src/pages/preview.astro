@@ -3,10 +3,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
 import Hero from "../components/Hero.astro";
 import AboutSection from "../components/AboutSection.astro";
-import ContentSection from "../components/ContentSection.astro";
-import ImagePlaceholder from "../components/ImagePlaceholder.astro";
+import FullBleedImage from "../components/FullBleedImage.astro";
+import TextSection from "../components/TextSection.astro";
 import CTA from "../components/CTA.astro";
 import Footer from "../components/Footer.astro";
+import ImageGallery from "../components/ImageGallery.astro";
 ---
 
 <BaseLayout title="Viršupis — Privatus namų kvartalas Vilniuje">
@@ -20,68 +21,46 @@ import Footer from "../components/Footer.astro";
       <!-- About Section -->
       <AboutSection />
 
-      <!-- Images Section -->
-      <ContentSection variant="images">
-        <ImagePlaceholder aspectRatio="4/3" />
-        <ImagePlaceholder aspectRatio="4/3" />
-        <ImagePlaceholder aspectRatio="4/3" />
-      </ContentSection>
+      <!-- Full Bleed Area Image -->
+      <FullBleedImage src="/images/Area image.png" alt="Viršupis area overview" parallax={true} />
 
-      <!-- Text Section: Houses -->
-      <ContentSection id="namai" variant="text" reverse>
-        <div class="md:order-2">
-          <h2 class="text-3xl md:text-4xl font-medium mb-6">
-            Namai
-          </h2>
-          <p class="text-white/70 leading-relaxed mb-4">
-            Kiekvienas Viršupio namas yra kruopščiai suprojektuotas,
-            derinant funkcionalumą su estetika. Erdvūs langai įleidžia
-            natūralią šviesą, o aukštos kokybės medžiagos užtikrina
-            ilgaamžiškumą.
-          </p>
-          <p class="text-white/70 leading-relaxed">
-            Namų plotai nuo 180 iki 280 kv. m., su privačiais sklypais
-            ir terasomis, leidžiančiomis mėgautis gamta bet kuriuo metų laiku.
-          </p>
-        </div>
-        <div class="md:order-1">
-          <ImagePlaceholder aspectRatio="4/3" />
-        </div>
-      </ContentSection>
+      <!-- Text Section -->
+      <TextSection
+        highlight="Viršupis — tai daugiau nei namai. Tai bendruomenė, kurioje kiekviena detalė sukurta jūsų komfortui ir gyvenimo kokybei."
+        content="Modernus gyvenamasis kvartalas Antakalnyje, kur susitinka miesto patogumas ir gamtos ramybė. 33 individualūs namai su privačiais sklypais, sukurti tiems, kurie vertina erdvę, privatumą ir aukščiausią kokybę."
+      />
 
-      <!-- Images Section -->
-      <ContentSection variant="images">
-        <ImagePlaceholder aspectRatio="3/4" />
-        <ImagePlaceholder aspectRatio="3/4" class="lg:col-span-2" />
-      </ContentSection>
+      <!-- Two Image Gallery with Parallax -->
+      <ImageGallery
+        image1="/images/House 1.jpeg"
+        image1Alt="Modern house exterior"
+        image2="/images/House 2.jpeg"
+        image2Alt="House in forest"
+      />
 
-      <!-- Text Section: Location -->
-      <ContentSection id="vieta" variant="text">
-        <div>
-          <h2 class="text-3xl md:text-4xl font-medium mb-6">
-            Vieta
-          </h2>
-          <p class="text-white/70 leading-relaxed mb-4">
-            Antakalnis — vienas prestižiškiausių Vilniaus rajonų, garsėjantis
-            savo žaliosiomis erdvėmis ir ramia aplinka. Viršupis įsikūręs
-            netoli Verkių regioninio parko, suteikiant tiesioginę prieigą
-            prie gamtos takų ir rekreacinių zonų.
-          </p>
-          <p class="text-white/70 leading-relaxed">
-            Patogi lokacija leidžia pasiekti miesto centrą vos per 15 minučių,
-            o netoliese esanti infrastruktūra — mokyklos, darželiai,
-            prekybos centrai — užtikrina kasdienį patogumą.
-          </p>
-        </div>
-        <div>
-          <ImagePlaceholder aspectRatio="4/3" />
-        </div>
-      </ContentSection>
+      <!-- Text Section -->
+      <TextSection
+        highlight="Kiekvienas namas suprojektuotas taip, kad maksimaliai išnaudotų natūralią šviesą ir atvertų vaizdus į supančią gamtą."
+        content="Erdvūs langai, aukštos lubos ir atviro plano erdvės sukuria jaukią, bet modernią atmosferą. Kokybiškos medžiagos ir dėmesys detalėms užtikrina ilgaamžiškumą."
+      />
 
-      <!-- Images Section -->
-      <ContentSection variant="images">
-        <ImagePlaceholder aspectRatio="16/9" class="md:col-span-2 lg:col-span-3" />
-      </ContentSection>
+      <!-- Full Bleed Image -->
+      <FullBleedImage src="/images/Area image2.jpeg" alt="House interior" parallax={true} />
+
+      <!-- Text Section -->
+      <TextSection
+        highlight="Viršupis — tai vieta, kur galite mėgautis ramybe ir gamta, neprarandant miesto patogumo."
+        content="Kvartalas suprojektuotas taip, kad kiekvienas namas turėtų privatumą ir erdvę, o bendruomenės zonos skatintų kaimynystę ir aktyvų gyvenimo būdą."
+      />
+
+      <!-- Two Image Gallery with Parallax (Reversed) -->
+      <ImageGallery
+        image1="/images/baseinas.jpeg"
+        image1Alt="Pool house"
+        image2="/images/Bendruomenes erdve.jpeg"
+        image2Alt="Community space"
+        reversed={true}
+      />
 
       <CTA
         title="Sužinokite daugiau"

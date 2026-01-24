@@ -1,9 +1,11 @@
 ---
 interface Props {
   class?: string;
+  variant?: "dark" | "light";
 }
 
-const { class: className } = Astro.props;
+const { class: className, variant = "dark" } = Astro.props;
+const color = variant === "light" ? "var(--color-white, #f8f4ee)" : "var(--color-black)";
 ---
 
 <svg
@@ -13,7 +15,7 @@ const { class: className } = Astro.props;
   xmlns="http://www.w3.org/2000/svg"
   aria-label="Viršupis"
   role="img"
-  style={`color: var(--color-black)`}
+  style={`color: ${color}`}
 >
   <path d="M1186.94 193.491H1151.74V56.2377H1186.94V193.491Z" fill="currentColor"/>
   <path d="M1016.25 56.2377C1084.28 56.2377 1115.55 69.2158 1115.55 100.481C1115.55 135.876 1076.42 146.101 1034.93 146.101C1019.79 146.101 1004.25 144.725 990.293 142.758C1049.28 145.708 1080.16 133.32 1080.16 99.1047C1080.16 65.0864 1042.99 60.3671 1016.25 60.5637H1009.76C985.377 60.5637 985.377 60.5637 985.377 76.8847V193.491H950.179V56.2377H1016.25Z" fill="currentColor"/>

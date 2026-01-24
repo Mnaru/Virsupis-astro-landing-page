@@ -1,0 +1,49 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  parallax?: boolean;
+  height?: number;
+}
+
+const { src, alt, parallax = false, height = 850 } = Astro.props;
+---
+
+<section
+  class:list={["full-bleed-image", { "parallax-enabled": parallax }]}
+  style={`height: ${height}px;`}
+>
+  <img src={src} alt={alt} loading="lazy" style={parallax ? `height: ${height}px;` : undefined} />
+</section>
+
+<style>
+  .full-bleed-image {
+    width: 100%;
+    overflow: hidden;
+    background-color: #e5e0d8;
+    position: relative;
+  }
+
+  .full-bleed-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Parallax mode: image stays fixed while content scrolls over */
+  .full-bleed-image.parallax-enabled {
+    /* Container clips the sticky image */
+    clip-path: inset(0);
+  }
+
+  .full-bleed-image.parallax-enabled img {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+  }
+</style>

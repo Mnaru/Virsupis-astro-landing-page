@@ -1,59 +1,254 @@
 ---
 import Logo from "./Logo.astro";
-import ContactButton from "./ContactButton.astro";
 
-const email = "info@virsupis.com";
-const googleMapsUrl = "https://maps.app.goo.gl/VrLXHLc5Ni44R8rA6";
+const email = "info@virsupis.lt";
+const phone = "+370 600 00000";
 const instagramUrl = "https://www.instagram.com/virsupis_vilnius/";
 const currentYear = new Date().getFullYear();
 ---
 
-<footer id="kontaktai" class="border-t border-[var(--color-border)] py-16 md:py-24">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="grid md:grid-cols-3 gap-12 mb-16">
-      <div>
-        <Logo class="w-32 mb-6" />
-        <p class="text-white/60 text-sm leading-relaxed">
-          Privatus 33 namų kvartalas Antakalnyje, Vilniuje.
-        </p>
-      </div>
-
-      <div>
-        <h3 class="text-sm uppercase tracking-widest mb-4">Nuorodos</h3>
-        <ul class="space-y-3">
-          <li>
-            <a
-              href={googleMapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-white/60 hover:text-white transition-colors text-sm"
-            >
-              Adresas žemėlapyje
-            </a>
-          </li>
-          <li>
-            <a
-              href={instagramUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-white/60 hover:text-white transition-colors text-sm"
-            >
-              Instagram
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div>
-        <h3 class="text-sm uppercase tracking-widest mb-4">Kontaktai</h3>
-        <ContactButton email={email} />
-      </div>
+<footer id="kontaktai" class="footer">
+  <!-- Top Row: Description + CTA | Navigation Columns -->
+  <div class="footer-top">
+    <!-- Left: Description + CTA -->
+    <div class="footer-left">
+      <p class="footer-description">
+        Viršupis — privatus 33 namų kvartalas Antakalnyje, Vilniuje. Modernus gyvenimas gamtos apsuptyje, vos 15 minučių nuo miesto centro.
+      </p>
+      <a href={`mailto:${email}`} class="footer-cta">
+        SUSISIEKTI
+      </a>
     </div>
 
-    <div class="border-t border-[var(--color-border)] pt-8">
-      <p class="text-white/40 text-sm">
-        &copy; {currentYear} Viršupis. Visos teisės saugomos.
-      </p>
+    <!-- Right: Navigation Columns -->
+    <div class="footer-nav">
+      <!-- Connect Column -->
+      <div class="nav-column">
+        <span class="nav-header">Connect</span>
+        <a href={`tel:${phone.replace(/\s/g, "")}`} class="nav-link">CALL</a>
+        <a href={`mailto:${email}`} class="nav-link">EMAIL</a>
+        <a href={instagramUrl} target="_blank" rel="noopener noreferrer" class="nav-link">INSTAGRAM</a>
+      </div>
+
+      <!-- Navigate Column -->
+      <div class="nav-column">
+        <span class="nav-header">Navigate</span>
+        <a href="#vieta" class="nav-link">LOCATION</a>
+        <a href="#namai" class="nav-link">HOMES</a>
+        <a href="#teritorija" class="nav-link">AREA</a>
+      </div>
     </div>
   </div>
+
+  <!-- Center: Large Logo -->
+  <div class="footer-logo-wrapper">
+    <Logo class="footer-logo" variant="light" />
+  </div>
+
+  <!-- Bottom Row: Disclaimer | Copyright -->
+  <div class="footer-bottom">
+    <p class="footer-disclaimer">
+      Svetainėje naudojamos iliustacijos yra informacinio pobūdžio.
+    </p>
+    <p class="footer-copyright">
+      © {currentYear} Viršupis. Visos teisės saugomos.
+    </p>
+  </div>
 </footer>
+
+<style>
+  .footer {
+    background-color: #161514;
+    color: var(--color-white, #f8f4ee);
+    padding: 80px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Top Row */
+  .footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 1392px;
+    margin: 0 auto;
+  }
+
+  .footer-left {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    max-width: 641px;
+  }
+
+  .footer-description {
+    font-family: var(--font-body, "Roboto", sans-serif);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    color: var(--color-white, #f8f4ee);
+    margin: 0;
+    text-align: left;
+    padding-right: 42px;
+  }
+
+  .footer-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 214px;
+    height: 48px;
+    border: 1px solid var(--color-white, #f8f4ee);
+    border-radius: 10px;
+    font-family: var(--font-body, "Roboto", sans-serif);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    color: var(--color-white, #f8f4ee);
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .footer-cta:hover {
+    background-color: var(--color-white, #f8f4ee);
+    color: #161514;
+  }
+
+  /* Navigation */
+  .footer-nav {
+    display: flex;
+  }
+
+  .nav-column {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-left: 16px;
+    border-left: 0.5px solid var(--color-white, #f8f4ee);
+    width: 212px;
+  }
+
+  .nav-header {
+    font-family: var(--font-body, "Roboto", sans-serif);
+    font-weight: 400;
+    font-size: 16px;
+    font-style: normal;
+    color: var(--color-white, #f8f4ee);
+    text-align: left;
+  }
+
+  .nav-link {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 14px;
+    letter-spacing: 0.2em;
+    color: var(--color-white, #f8f4ee);
+    text-decoration: none;
+    text-align: left;
+    transition: opacity 0.2s ease;
+  }
+
+  .nav-link:hover {
+    opacity: 0.7;
+  }
+
+  /* Logo */
+  .footer-logo-wrapper {
+    width: 100%;
+    max-width: 1392px;
+    margin: 0 auto;
+    padding: 16px 0 24px;
+    color: var(--color-white, #f8f4ee);
+  }
+
+  .footer-logo {
+    width: 100%;
+    height: auto;
+  }
+
+  /* Bottom Row */
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1392px;
+    margin: 0 auto;
+  }
+
+  .footer-disclaimer,
+  .footer-copyright {
+    font-family: var(--font-body, "Roboto", sans-serif);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 14px;
+    color: var(--color-white, #f8f4ee);
+    margin: 0;
+  }
+
+  /* Tablet */
+  @media (max-width: 1023px) {
+    .footer-top {
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    .footer-left {
+      max-width: 100%;
+    }
+
+    .nav-column {
+      width: 180px;
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .footer {
+      padding: 60px 16px 24px;
+      gap: 40px;
+    }
+
+    .footer-top {
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .footer-left {
+      gap: 24px;
+    }
+
+    .footer-cta {
+      width: 100%;
+      max-width: 280px;
+    }
+
+    .footer-nav {
+      width: 100%;
+    }
+
+    .nav-column {
+      flex: 1;
+      width: auto;
+      min-width: 0;
+    }
+
+    .footer-logo-wrapper {
+      padding: 8px 0 16px;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .footer-disclaimer,
+    .footer-copyright {
+      font-size: 12px;
+    }
+  }
+</style>

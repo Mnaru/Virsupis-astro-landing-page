@@ -1,0 +1,353 @@
+---
+interface Props {
+  image1: string;
+  image1Alt: string;
+  image2: string;
+  image2Alt: string;
+  parallax?: boolean;
+  reversed?: boolean;
+}
+
+const { image1, image1Alt, image2, image2Alt, parallax = true, reversed = false } = Astro.props;
+---
+
+<section class:list={["image-gallery", { reversed }]}>
+  <div class="gallery-container">
+    <div class:list={["image-left", { "parallax-enabled": parallax }]}>
+      <img src={image1} alt={image1Alt} loading="lazy" />
+    </div>
+    <div class:list={["image-right", { "parallax-enabled": parallax }]}>
+      <img src={image2} alt={image2Alt} loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .image-gallery {
+    position: relative;
+    width: 100%;
+    height: 988px;
+    background-color: var(--color-white, #f8f4ee);
+  }
+
+  .image-gallery.reversed {
+    height: 1313px;
+  }
+
+  .gallery-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  /* Default layout: large left, small right */
+  .image-left {
+    position: absolute;
+    left: 126px;
+    top: 0;
+    width: 635px;
+    height: 800px;
+    overflow: hidden;
+  }
+
+  .image-right {
+    position: absolute;
+    left: 873px;
+    top: 451px;
+    width: 426px;
+    height: 537px;
+    overflow: hidden;
+  }
+
+  /* Reversed layout: small left, large right */
+  .image-gallery.reversed .image-left {
+    left: 169px;
+    top: 0;
+    width: 458px;
+    height: 577px;
+  }
+
+  .image-gallery.reversed .image-right {
+    left: 719px;
+    top: 399px;
+    width: 635px;
+    height: 800px;
+  }
+
+  .image-left img,
+  .image-right img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Parallax mode: image is taller than container for GSAP yPercent animation */
+  .image-left.parallax-enabled img,
+  .image-right.parallax-enabled img {
+    height: 115%;
+    position: relative;
+    top: -7.5%; /* Center the extra height initially */
+  }
+
+  /* Large screens - scale proportionally */
+  @media (min-width: 1440px) {
+    .image-gallery {
+      height: calc(988 / 1440 * 100vw);
+    }
+
+    .image-gallery.reversed {
+      height: calc(1313 / 1440 * 100vw);
+    }
+
+    .gallery-container {
+      max-width: 100%;
+    }
+
+    /* Default layout scaling */
+    .image-left {
+      left: calc(126 / 1440 * 100vw);
+      width: calc(635 / 1440 * 100vw);
+      height: calc(800 / 1440 * 100vw);
+    }
+
+    .image-right {
+      left: calc(873 / 1440 * 100vw);
+      top: calc(451 / 1440 * 100vw);
+      width: calc(426 / 1440 * 100vw);
+      height: calc(537 / 1440 * 100vw);
+    }
+
+    /* Reversed layout scaling */
+    .image-gallery.reversed .image-left {
+      left: calc(169 / 1440 * 100vw);
+      top: 0;
+      width: calc(458 / 1440 * 100vw);
+      height: calc(577 / 1440 * 100vw);
+    }
+
+    .image-gallery.reversed .image-right {
+      left: calc(719 / 1440 * 100vw);
+      top: calc(399 / 1440 * 100vw);
+      width: calc(635 / 1440 * 100vw);
+      height: calc(800 / 1440 * 100vw);
+    }
+  }
+
+  /* Medium screens - scale proportionally */
+  @media (max-width: 1439px) and (min-width: 1024px) {
+    .image-gallery {
+      height: calc(988 / 1440 * 100vw);
+    }
+
+    .image-gallery.reversed {
+      height: calc(1313 / 1440 * 100vw);
+    }
+
+    /* Default layout scaling */
+    .image-left {
+      left: calc(126 / 1440 * 100vw);
+      width: calc(635 / 1440 * 100vw);
+      height: calc(800 / 1440 * 100vw);
+    }
+
+    .image-right {
+      left: calc(873 / 1440 * 100vw);
+      top: calc(451 / 1440 * 100vw);
+      width: calc(426 / 1440 * 100vw);
+      height: calc(537 / 1440 * 100vw);
+    }
+
+    /* Reversed layout scaling */
+    .image-gallery.reversed .image-left {
+      left: calc(169 / 1440 * 100vw);
+      top: 0;
+      width: calc(458 / 1440 * 100vw);
+      height: calc(577 / 1440 * 100vw);
+    }
+
+    .image-gallery.reversed .image-right {
+      left: calc(719 / 1440 * 100vw);
+      top: calc(399 / 1440 * 100vw);
+      width: calc(635 / 1440 * 100vw);
+      height: calc(800 / 1440 * 100vw);
+    }
+  }
+
+  /* Tablet - start transitioning to stacked */
+  @media (max-width: 1023px) and (min-width: 769px) {
+    .image-gallery,
+    .image-gallery.reversed {
+      height: auto;
+      padding: 60px 40px;
+    }
+
+    .gallery-container {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      gap: 24px;
+      height: auto;
+    }
+
+    .image-left,
+    .image-right {
+      position: relative;
+      left: auto;
+      top: auto;
+    }
+
+    .image-left {
+      flex: 1.5;
+      width: auto;
+      height: auto;
+      aspect-ratio: 635 / 800;
+    }
+
+    .image-right {
+      flex: 1;
+      width: auto;
+      height: auto;
+      aspect-ratio: 426 / 537;
+      align-self: flex-end;
+    }
+
+    /* Reversed tablet layout - must reset position properties */
+    .image-gallery.reversed .image-left,
+    .image-gallery.reversed .image-right {
+      position: relative;
+      left: auto;
+      top: auto;
+      width: auto;
+      height: auto;
+    }
+
+    .image-gallery.reversed .image-left {
+      flex: 1;
+      aspect-ratio: 458 / 577;
+      align-self: flex-start;
+    }
+
+    .image-gallery.reversed .image-right {
+      flex: 1.5;
+      aspect-ratio: 635 / 800;
+      align-self: flex-end;
+    }
+
+    /* Disable parallax on tablet */
+    .image-left.parallax-enabled img,
+    .image-right.parallax-enabled img {
+      height: 100%;
+      top: 0;
+    }
+  }
+
+  /* Mobile - stacked layout */
+  @media (max-width: 768px) {
+    .image-gallery,
+    .image-gallery.reversed {
+      height: auto;
+      padding: 60px 16px;
+    }
+
+    .gallery-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      height: auto;
+    }
+
+    .image-left,
+    .image-right {
+      position: relative;
+      left: auto;
+      top: auto;
+      width: 100%;
+      height: auto;
+    }
+
+    .image-left {
+      aspect-ratio: 635 / 800;
+    }
+
+    .image-right {
+      aspect-ratio: 426 / 537;
+    }
+
+    /* Reversed mobile layout - must reset position properties */
+    .image-gallery.reversed .image-left,
+    .image-gallery.reversed .image-right {
+      position: relative;
+      left: auto;
+      top: auto;
+      width: 100%;
+      height: auto;
+    }
+
+    .image-gallery.reversed .image-left {
+      aspect-ratio: 458 / 577;
+    }
+
+    .image-gallery.reversed .image-right {
+      aspect-ratio: 635 / 800;
+    }
+
+    /* Disable parallax on mobile */
+    .image-left.parallax-enabled img,
+    .image-right.parallax-enabled img {
+      height: 100%;
+      top: 0;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Only run parallax on desktop (1024px+)
+  const mediaQuery = window.matchMedia("(min-width: 1024px)");
+
+  function initParallax() {
+    if (!mediaQuery.matches) return;
+
+    const containers = document.querySelectorAll(".image-gallery .parallax-enabled");
+
+    containers.forEach((container) => {
+      const img = container.querySelector("img");
+      if (!img) return;
+
+      gsap.fromTo(
+        img,
+        { yPercent: -7.5 },
+        {
+          yPercent: 7.5,
+          ease: "none",
+          scrollTrigger: {
+            trigger: container,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        }
+      );
+    });
+  }
+
+  // Initialize on load
+  initParallax();
+
+  // Refresh ScrollTrigger on resize
+  let resizeTimeout: ReturnType<typeof setTimeout>;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
+  });
+</script>
