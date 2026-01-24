@@ -157,28 +157,10 @@ import NavButton from "./NavButton.astro";
       /* GSAP will handle width and position animation */
     }
 
-    /* EXPANDED STATE (default on load) — hamburger completely hidden */
+    /* Hamburger - starts hidden (opacity 0), GSAP animates to visible */
     .hamburger-btn {
-      display: none; /* Completely hidden - not just opacity */
-      visibility: hidden;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    /* COLLAPSED STATE — hamburger visible (class added by GSAP) */
-    .header.collapsed .hamburger-btn {
       display: flex;
-      visibility: visible;
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    /* Prevent CSS transitions from interfering with GSAP */
-    .header-logo,
-    .header-inner,
-    .header-spacer,
-    .hamburger-btn {
-      transition: none !important;
+      opacity: 0; /* GSAP will animate this */
     }
   }
 </style>
@@ -339,67 +321,51 @@ import NavButton from "./NavButton.astro";
 
       // Mobile: trigger when About section enters viewport
       "(max-width: 768px)": function () {
-        // Calculate collapsed state values
-        const collapsedLogoWidth = getCollapsedLogoWidth(true);
-        const collapsedHeight = getCollapsedHeight(true);
-        const collapsedSpacerHeight = getCollapsedSpacerHeight(true);
-        const collapsedX = -(window.innerWidth - 32 - collapsedLogoWidth) / 2;
-
-        // Calculate expanded state values for heights
-        const expandedHeight = getExpandedHeight(true);
-        const expandedSpacerHeight = getSpacerHeight(true);
-
-        // Kill any existing tweens to prevent conflicts
-        gsap.killTweensOf(logo);
-        gsap.killTweensOf(headerInner);
-        gsap.killTweensOf(spacer);
-
-        // Ensure header starts without collapsed class — CSS handles hamburger visibility
-        header?.classList.remove("collapsed");
-
-        // Set initial HEIGHTS only — CSS handles logo width and hamburger visibility
-        // Heights need JS calculation based on viewport and logo aspect ratio
-        gsap.set(headerInner, { height: expandedHeight });
-        gsap.set(spacer, { height: expandedSpacerHeight });
+        // Set initial expanded state
+        setInitialState(true);
 
         if (aboutSection) {
-          // ScrollTrigger for class toggle (controls hamburger visibility via CSS)
-          ScrollTrigger.create({
-            trigger: aboutSection,
-            start: "top bottom",
-            onEnter: () => header?.classList.add("collapsed"),
-            onLeaveBack: () => header?.classList.remove("collapsed"),
-          });
+          const collapsedLogoWidth = getCollapsedLogoWidth(true);
+          const collapsedX = -(window.innerWidth - 32 - collapsedLogoWidth) / 2;
 
-          // Shared scrub config for smooth animations
-          const scrubConfig = {
+          // Shared ScrollTrigger config
+          const scrollConfig = {
             trigger: aboutSection,
             start: "top bottom",
             end: "top 70%",
             scrub: 0.5,
           };
 
-          // Logo: animate from CSS default (full width) to collapsed
+          // Logo: shrink and move left
           gsap.to(logo, {
             width: collapsedLogoWidth,
             x: collapsedX,
             ease: "none",
-            scrollTrigger: scrubConfig,
+            scrollTrigger: scrollConfig,
           });
 
           // Header inner height
           gsap.to(headerInner, {
-            height: collapsedHeight,
+            height: getCollapsedHeight(true),
             ease: "none",
-            scrollTrigger: { ...scrubConfig },
+            scrollTrigger: { ...scrollConfig },
           });
 
           // Spacer height
           gsap.to(spacer, {
-            height: collapsedSpacerHeight,
+            height: getCollapsedSpacerHeight(true),
             ease: "none",
-            scrollTrigger: { ...scrubConfig },
+            scrollTrigger: { ...scrollConfig },
           });
+
+          // Hamburger: fade in
+          if (hamburger) {
+            gsap.to(hamburger, {
+              opacity: 1,
+              ease: "none",
+              scrollTrigger: { ...scrollConfig },
+            });
+          }
         }
       },
     });
