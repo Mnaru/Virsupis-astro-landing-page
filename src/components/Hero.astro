@@ -52,7 +52,8 @@ const { image, mobileImage, alt = "" } = Astro.props;
 
   @media (max-width: 768px) {
     .hero {
-      height: 800px;
+      height: 90vh; /* Fallback for older browsers */
+      height: 90svh; /* Small viewport height - stable on iOS */
       /* Use backface-visibility instead of transform to avoid GSAP conflicts */
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
@@ -63,7 +64,8 @@ const { image, mobileImage, alt = "" } = Astro.props;
     }
 
     .hero-spacer {
-      height: 800px;
+      height: 90vh;
+      height: 90svh;
     }
   }
 </style>
