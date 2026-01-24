@@ -1,0 +1,18 @@
+---
+interface Props {
+  aspectRatio?: string;
+  class?: string;
+  alt?: string;
+}
+
+const { aspectRatio = "4/3", class: className, alt = "Placeholder" } = Astro.props;
+---
+
+<div
+  class={`bg-[var(--color-border)] overflow-hidden ${className}`}
+  style={`aspect-ratio: ${aspectRatio}`}
+>
+  <div class="w-full h-full flex items-center justify-center text-white/30 text-sm">
+    <span>Nuotrauka</span>
+  </div>
+</div>

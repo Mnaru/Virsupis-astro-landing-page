@@ -1,0 +1,111 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import ContentSection from "../components/ContentSection.astro";
+import ImagePlaceholder from "../components/ImagePlaceholder.astro";
+import CTA from "../components/CTA.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<BaseLayout title="Viršupis — Privatus namų kvartalas Vilniuje">
+  <Header />
+
+  <main>
+    <Hero image="/images/Hero image.png" alt="Viršupis - privatus namų kvartalas" />
+
+    <!-- Text Section: About -->
+    <ContentSection id="apie" variant="text">
+      <div>
+        <h2 class="text-3xl md:text-4xl font-medium mb-6">
+          Apie Viršupį
+        </h2>
+        <p class="text-white/70 leading-relaxed mb-4">
+          Viršupis — tai išskirtinis gyvenamasis kvartalas Antakalnyje,
+          Vilniuje. Projektas apjungia modernią architektūrą su natūralia
+          aplinka, sukuriant harmoningą erdvę gyvenimui.
+        </p>
+        <p class="text-white/70 leading-relaxed">
+          33 privatūs namai, suprojektuoti atsižvelgiant į gamtos teikiamą
+          ramybę ir miesto patogumą. Kiekvienas namas — unikalus sprendimas,
+          atitinkantis aukščiausius kokybės standartus.
+        </p>
+      </div>
+      <div>
+        <ImagePlaceholder aspectRatio="4/3" />
+      </div>
+    </ContentSection>
+
+    <!-- Images Section -->
+    <ContentSection variant="images">
+      <ImagePlaceholder aspectRatio="4/3" />
+      <ImagePlaceholder aspectRatio="4/3" />
+      <ImagePlaceholder aspectRatio="4/3" />
+    </ContentSection>
+
+    <!-- Text Section: Houses -->
+    <ContentSection id="namai" variant="text" reverse>
+      <div class="md:order-2">
+        <h2 class="text-3xl md:text-4xl font-medium mb-6">
+          Namai
+        </h2>
+        <p class="text-white/70 leading-relaxed mb-4">
+          Kiekvienas Viršupio namas yra kruopščiai suprojektuotas,
+          derinant funkcionalumą su estetika. Erdvūs langai įleidžia
+          natūralią šviesą, o aukštos kokybės medžiagos užtikrina
+          ilgaamžiškumą.
+        </p>
+        <p class="text-white/70 leading-relaxed">
+          Namų plotai nuo 180 iki 280 kv. m., su privačiais sklypais
+          ir terasomis, leidžiančiomis mėgautis gamta bet kuriuo metų laiku.
+        </p>
+      </div>
+      <div class="md:order-1">
+        <ImagePlaceholder aspectRatio="4/3" />
+      </div>
+    </ContentSection>
+
+    <!-- Images Section -->
+    <ContentSection variant="images">
+      <ImagePlaceholder aspectRatio="3/4" />
+      <ImagePlaceholder aspectRatio="3/4" class="lg:col-span-2" />
+    </ContentSection>
+
+    <!-- Text Section: Location -->
+    <ContentSection id="vieta" variant="text">
+      <div>
+        <h2 class="text-3xl md:text-4xl font-medium mb-6">
+          Vieta
+        </h2>
+        <p class="text-white/70 leading-relaxed mb-4">
+          Antakalnis — vienas prestižiškiausių Vilniaus rajonų, garsėjantis
+          savo žaliosiomis erdvėmis ir ramia aplinka. Viršupis įsikūręs
+          netoli Verkių regioninio parko, suteikiant tiesioginę prieigą
+          prie gamtos takų ir rekreacinių zonų.
+        </p>
+        <p class="text-white/70 leading-relaxed">
+          Patogi lokacija leidžia pasiekti miesto centrą vos per 15 minučių,
+          o netoliese esanti infrastruktūra — mokyklos, darželiai,
+          prekybos centrai — užtikrina kasdienį patogumą.
+        </p>
+      </div>
+      <div>
+        <ImagePlaceholder aspectRatio="4/3" />
+      </div>
+    </ContentSection>
+
+    <!-- Images Section -->
+    <ContentSection variant="images">
+      <ImagePlaceholder aspectRatio="16/9" class="md:col-span-2 lg:col-span-3" />
+    </ContentSection>
+
+    <CTA
+      title="Sužinokite daugiau"
+      description="Susisiekite su mumis ir gaukite išsamią informaciją apie Viršupio projektą."
+      buttonText="Susisiekti"
+      buttonHref="mailto:info@virsupis.com"
+    />
+  </main>
+
+  <Footer />
+</BaseLayout>

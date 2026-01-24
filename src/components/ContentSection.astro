@@ -1,0 +1,27 @@
+---
+interface Props {
+  id?: string;
+  variant?: "text" | "images";
+  reverse?: boolean;
+}
+
+const { id, variant = "text", reverse = false } = Astro.props;
+---
+
+<section id={id} class="py-24 md:py-32">
+  <div class="max-w-7xl mx-auto px-6">
+    {
+      variant === "text" ? (
+        <div
+          class={`grid md:grid-cols-2 gap-12 md:gap-16 items-center ${reverse ? "md:flex-row-reverse" : ""}`}
+        >
+          <slot />
+        </div>
+      ) : (
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          <slot />
+        </div>
+      )
+    }
+  </div>
+</section>

@@ -1,0 +1,59 @@
+---
+import Logo from "./Logo.astro";
+import ContactButton from "./ContactButton.astro";
+
+const email = "info@virsupis.com";
+const googleMapsUrl = "https://maps.app.goo.gl/VrLXHLc5Ni44R8rA6";
+const instagramUrl = "https://www.instagram.com/virsupis_vilnius/";
+const currentYear = new Date().getFullYear();
+---
+
+<footer id="kontaktai" class="border-t border-[var(--color-border)] py-16 md:py-24">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid md:grid-cols-3 gap-12 mb-16">
+      <div>
+        <Logo class="w-32 mb-6" />
+        <p class="text-white/60 text-sm leading-relaxed">
+          Privatus 33 namų kvartalas Antakalnyje, Vilniuje.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-sm uppercase tracking-widest mb-4">Nuorodos</h3>
+        <ul class="space-y-3">
+          <li>
+            <a
+              href={googleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-white/60 hover:text-white transition-colors text-sm"
+            >
+              Adresas žemėlapyje
+            </a>
+          </li>
+          <li>
+            <a
+              href={instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-white/60 hover:text-white transition-colors text-sm"
+            >
+              Instagram
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-sm uppercase tracking-widest mb-4">Kontaktai</h3>
+        <ContactButton email={email} />
+      </div>
+    </div>
+
+    <div class="border-t border-[var(--color-border)] pt-8">
+      <p class="text-white/40 text-sm">
+        &copy; {currentYear} Viršupis. Visos teisės saugomos.
+      </p>
+    </div>
+  </div>
+</footer>

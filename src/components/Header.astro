@@ -1,0 +1,214 @@
+---
+import Logo from "./Logo.astro";
+import NavButton from "./NavButton.astro";
+---
+
+<header id="site-header" class="header">
+  <div id="header-inner" class="header-inner">
+    <!-- Menu items positioned absolutely - they never move -->
+    <nav class="nav-left" aria-label="Pagrindinė navigacija">
+      <NavButton href="#apie" label="Apie" />
+      <NavButton href="#namai" label="Namai" />
+    </nav>
+
+    <nav class="nav-right">
+      <NavButton href="#vieta" label="Vieta" />
+      <NavButton href="#kontaktai" label="Kontaktai" />
+    </nav>
+
+    <!-- Logo - CSS handles responsive sizing, GSAP animates collapse -->
+    <a href="/preview" id="header-logo" class="header-logo" aria-label="Viršupis - Į pradžią">
+      <Logo class="logo-img" />
+    </a>
+  </div>
+</header>
+
+<!-- Spacer to push content down -->
+<div id="header-spacer" class="header-spacer"></div>
+
+<style>
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background-color: #f8f4ee;
+    overflow: hidden;
+  }
+
+  .header-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 24px 16px;
+    position: relative;
+    /* Height will be animated by GSAP */
+  }
+
+  /* Navigation - absolutely positioned, never moves */
+  .nav-left,
+  .nav-right {
+    position: absolute;
+    top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 42px;
+    height: 37px;
+    z-index: 2;
+  }
+
+  .nav-left {
+    left: 24px;
+  }
+
+  .nav-right {
+    right: 24px;
+  }
+
+  /* Logo - CSS handles responsive sizing */
+  .header-logo {
+    display: block;
+    /* Expanded: full width minus padding, capped at 1392px (logo native width) */
+    width: calc(100vw - 48px);
+    max-width: 1392px;
+    margin-top: 37px; /* Space below nav items */
+    pointer-events: auto;
+    /* Width will be animated by GSAP */
+  }
+
+  .logo-img {
+    width: 100%;
+    height: auto;
+  }
+
+  /* Spacer - height will be animated by GSAP */
+  .header-spacer {
+    /* Initial height set by GSAP */
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Get elements
+  const header = document.getElementById("site-header");
+  const headerInner = document.getElementById("header-inner");
+  const logo = document.getElementById("header-logo");
+  const spacer = document.getElementById("header-spacer");
+
+  if (header && headerInner && logo && spacer) {
+    // Logo aspect ratio (1392 / 202)
+    const logoAspectRatio = 6.89;
+
+    // Get expanded logo width (CSS: calc(100vw - 48px), max 1392px)
+    const getExpandedLogoWidth = () => {
+      return Math.min(window.innerWidth - 48, 1392);
+    };
+
+    // Calculate header height based on logo height + spacing
+    // Nav height: 37px, Nav top: 16px, Logo margin-top: 37px, Bottom padding: 16px
+    const getExpandedHeight = () => {
+      const logoWidth = getExpandedLogoWidth();
+      const logoHeight = logoWidth / logoAspectRatio;
+      return 16 + 37 + logoHeight + 16; // top padding + logo margin-top + logo height + bottom padding
+    };
+
+    const getSpacerHeight = () => {
+      return getExpandedHeight() + 16; // A bit more to account for fixed positioning
+    };
+
+    // Collapsed state values (fixed)
+    const collapsedLogoWidth = 318;
+    const collapsedLogoHeight = collapsedLogoWidth / logoAspectRatio; // ~46px
+    const collapsedHeight = 63;
+    const collapsedSpacerHeight = 79;
+    // To vertically center: (headerHeight - logoHeight) / 2 - paddingTop
+    // (63 - 46) / 2 - 16 = 8.5 - 16 = -7.5
+    const collapsedMarginTop = (collapsedHeight - collapsedLogoHeight) / 2 - 16;
+
+    // Set initial state (expanded)
+    gsap.set(logo, {
+      width: () => getExpandedLogoWidth(),
+      marginTop: 37,
+    });
+    gsap.set(headerInner, { height: () => getExpandedHeight() });
+    gsap.set(spacer, { height: () => getSpacerHeight() });
+
+    // Create scroll-linked animation
+    const scrollTriggerDistance = 100;
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: document.body,
+        start: "top top",
+        end: `+=${scrollTriggerDistance}`,
+        scrub: 0.5,
+        invalidateOnRefresh: true,
+        onRefresh: () => {
+          // Reset expanded values when at top
+          if (window.scrollY === 0) {
+            gsap.set(logo, {
+              width: getExpandedLogoWidth(),
+              marginTop: 37,
+            });
+            gsap.set(headerInner, { height: getExpandedHeight() });
+            gsap.set(spacer, { height: getSpacerHeight() });
+          }
+        },
+      },
+    });
+
+    // Animate from expanded to collapsed
+    tl.fromTo(
+      logo,
+      {
+        width: () => getExpandedLogoWidth(),
+        marginTop: 37,
+      },
+      {
+        width: collapsedLogoWidth,
+        marginTop: collapsedMarginTop,
+        ease: "none",
+      },
+      0
+    )
+      .fromTo(
+        headerInner,
+        {
+          height: () => getExpandedHeight(),
+        },
+        {
+          height: collapsedHeight,
+          ease: "none",
+        },
+        0
+      )
+      .fromTo(
+        spacer,
+        {
+          height: () => getSpacerHeight(),
+        },
+        {
+          height: collapsedSpacerHeight,
+          ease: "none",
+        },
+        0
+      );
+
+    // Debounced resize handler
+    let resizeTimeout: ReturnType<typeof setTimeout>;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => ScrollTrigger.refresh(), 100);
+    });
+
+    // Also refresh on orientation change
+    window.addEventListener("orientationchange", () => {
+      setTimeout(() => ScrollTrigger.refresh(), 100);
+    });
+  }
+</script>

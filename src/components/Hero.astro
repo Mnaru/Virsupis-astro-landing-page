@@ -1,0 +1,27 @@
+---
+interface Props {
+  image: string;
+  alt?: string;
+}
+
+const { image, alt = "" } = Astro.props;
+---
+
+<section class="hero">
+  <img src={image} alt={alt} class="hero-image" loading="eager" />
+</section>
+
+<style>
+  .hero {
+    width: 100%;
+    height: 850px;
+    overflow: hidden;
+  }
+
+  .hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+</style>

@@ -1,0 +1,63 @@
+---
+interface Props {
+  href: string;
+  label: string;
+  external?: boolean;
+  class?: string;
+}
+
+const { href, label, external = false, class: className } = Astro.props;
+
+const externalProps = external
+  ? { target: "_blank", rel: "noopener noreferrer" }
+  : {};
+---
+
+<a href={href} class:list={["nav-button", className]} {...externalProps}>
+  <span class="nav-button-text">{label}</span>
+  <span class="nav-button-underline"></span>
+</a>
+
+<style>
+  .nav-button {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #161514;
+    font-family: "Montserrat", sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 14px;
+    letter-spacing: 2.4px;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .nav-button-text {
+    position: relative;
+  }
+
+  .nav-button-underline {
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: #161514;
+    margin-top: 4px;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.3s ease-out;
+  }
+
+  .nav-button:hover .nav-button-underline {
+    transform: scaleX(1);
+  }
+
+  /* Focus state for accessibility */
+  .nav-button:focus-visible {
+    outline: 2px solid #161514;
+    outline-offset: 4px;
+  }
+</style>
