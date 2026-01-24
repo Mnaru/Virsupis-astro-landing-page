@@ -53,11 +53,9 @@ const { image, mobileImage, alt = "" } = Astro.props;
   @media (max-width: 768px) {
     .hero {
       height: 800px;
-      /* Stabilize fixed positioning during browser toolbar changes */
-      -webkit-transform: translateZ(0);
-      transform: translateZ(0);
-      will-change: transform;
-      contain: layout style paint;
+      /* Use backface-visibility instead of transform to avoid GSAP conflicts */
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
     }
 
     .hero-image {
@@ -66,8 +64,6 @@ const { image, mobileImage, alt = "" } = Astro.props;
 
     .hero-spacer {
       height: 800px;
-      /* Account for mobile browser bottom safe area */
-      padding-bottom: env(safe-area-inset-bottom, 0);
     }
   }
 </style>

@@ -43,15 +43,8 @@
   @media (max-width: 768px) {
     html,
     body {
-      /* Use fixed height to prevent reflow on toolbar changes */
-      height: 100%;
-      /* Prevent content from resizing when toolbar changes */
+      /* Prevent horizontal scroll */
       overflow-x: hidden;
-    }
-
-    body {
-      /* Ensure consistent rendering */
-      -webkit-overflow-scrolling: touch;
     }
   }
 }

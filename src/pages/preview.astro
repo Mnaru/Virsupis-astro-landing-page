@@ -91,12 +91,9 @@ import ImageGallery from "../components/ImageGallery.astro";
 
   @media (max-width: 768px) {
     .content-wrapper {
-      /* Stabilize during browser toolbar changes */
-      -webkit-transform: translateZ(0);
-      transform: translateZ(0);
-      will-change: transform;
-      /* Account for mobile browser bottom safe area */
-      padding-bottom: env(safe-area-inset-bottom, 0);
+      /* Use backface-visibility to avoid GSAP conflicts */
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
     }
   }
 </style>
