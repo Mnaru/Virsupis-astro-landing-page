@@ -3,6 +3,7 @@
 @theme {
   --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-heading: "Montserrat", system-ui, sans-serif;
+  --font-body: "Roboto", system-ui, sans-serif;
 
   --color-black: #161514;
   --color-white: #f8f4ee;
@@ -23,8 +24,12 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    font-family: var(--font-sans);
-    line-height: 1.6;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: center;
   }
 
   ::selection {

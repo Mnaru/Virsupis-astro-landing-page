@@ -1,0 +1,139 @@
+---
+interface Props {
+  heading?: string;
+  description?: string;
+}
+
+const {
+  heading = "ABOUT THE PROJECT",
+  description = "Viršupis — išskirtinis gyvenamasis kvartalas Antakalnyje, Vilniuje. Projektas apjungia modernią architektūrą su natūralia aplinka, sukuriant harmoningą erdvę gyvenimui. Kiekvienas namas suprojektuotas atsižvelgiant į gamtos teikiamą ramybę ir miesto patogumą."
+} = Astro.props;
+
+const features = [
+  { label: "LOCATION", value: "Antakalnis, Vilnius" },
+  { label: "SCOPE", value: "62 residences" },
+  { label: "AREA", value: "79–162 m²" },
+  { label: "AVAILABLE", value: "2026, 2nd Quarter" },
+];
+---
+
+<section id="apie" class="about-section">
+  <div class="about-content">
+    <h2 class="about-heading">{heading}</h2>
+    <p class="about-description">{description}</p>
+  </div>
+
+  <div class="features-row">
+    {features.map((feature) => (
+      <div class="feature">
+        <span class="feature-label">{feature.label}</span>
+        <span class="feature-value">{feature.value}</span>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .about-section {
+    position: relative;
+    z-index: 2;
+    background-color: var(--color-white, #f8f4ee);
+    height: 750px;
+    padding: 90px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 64px;
+    text-align: center;
+  }
+
+  .about-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    max-width: 854px;
+    width: 100%;
+  }
+
+  .about-heading {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 21px;
+    line-height: 1;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-black, #161514);
+    margin: 0;
+  }
+
+  .about-description {
+    font-family: var(--font-body, "Roboto", sans-serif);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: normal;
+    color: var(--color-black, #161514);
+    margin: 0;
+  }
+
+  .features-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .feature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    width: 212px;
+    text-align: center;
+  }
+
+  .feature-label {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-black, #161514);
+  }
+
+  .feature-value {
+    font-family: var(--font-body, "Roboto", sans-serif);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: normal;
+    color: var(--color-black, #161514);
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .about-section {
+      padding: 64px 16px;
+      gap: 48px;
+    }
+
+    .about-content {
+      gap: 24px;
+    }
+
+    .about-heading {
+      font-size: 18px;
+    }
+
+    .features-row {
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .feature {
+      width: 100%;
+      gap: 16px;
+    }
+  }
+</style>
