@@ -312,6 +312,11 @@ const { image1, image1Alt, image2, image2Alt, parallax = true, reversed = false 
 
   gsap.registerPlugin(ScrollTrigger);
 
+  // Prevent scroll recalculation on mobile toolbar show/hide
+  ScrollTrigger.config({
+    ignoreMobileResize: true,
+  });
+
   // Only run parallax on desktop (1024px+)
   const mediaQuery = window.matchMedia("(min-width: 1024px)");
 
