@@ -129,9 +129,8 @@ import NavButton from "./NavButton.astro";
       left: 0;
       right: 0;
       z-index: 100;
-      -webkit-transform: translateZ(0);
-      transform: translateZ(0);
-      will-change: transform;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
     }
 
     .header-inner {
@@ -323,6 +322,9 @@ import NavButton from "./NavButton.astro";
         0
       );
     }
+
+    // Refresh ScrollTrigger after setup to ensure proper initialization on mobile
+    ScrollTrigger.refresh();
 
     // Debounced resize handler
     let resizeTimeout: ReturnType<typeof setTimeout>;
