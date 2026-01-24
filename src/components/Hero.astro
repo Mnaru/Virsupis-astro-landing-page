@@ -8,7 +8,7 @@ const { image, alt = "" } = Astro.props;
 ---
 
 <section class="hero">
-  <img id="hero-image" src={image} alt={alt} class="hero-image" loading="eager" />
+  <img id="hero-image" src={image} alt={alt} class="hero-image" loading="eager" fetchpriority="high" />
 </section>
 
 <!-- Spacer to push content below fixed hero -->

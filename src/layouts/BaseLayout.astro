@@ -23,6 +23,7 @@ const { title, description = "Privatus namų kvartalas Vilniuje" } = Astro.props
       rel="stylesheet"
     />
     <title>{title}</title>
+    <slot name="head" />
   </head>
   <body>
     <slot />
