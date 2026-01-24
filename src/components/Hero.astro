@@ -45,10 +45,12 @@ const { image, mobileImage, alt = "" } = Astro.props;
     z-index: 1;
   }
 
-  /* Mobile - full viewport height with adjusted image position */
+  /* Mobile - aspect ratio based sizing to show more of the image */
   @media (max-width: 768px) {
     .hero {
-      height: 100svh;
+      height: auto;
+      aspect-ratio: 2 / 3;
+      max-height: 100svh;
     }
 
     .hero-image {
@@ -56,7 +58,9 @@ const { image, mobileImage, alt = "" } = Astro.props;
     }
 
     .hero-spacer {
-      height: 100svh;
+      height: auto;
+      aspect-ratio: 2 / 3;
+      max-height: 100svh;
     }
   }
 </style>
