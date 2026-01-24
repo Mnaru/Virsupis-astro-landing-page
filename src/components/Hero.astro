@@ -53,18 +53,21 @@ const { image, mobileImage, alt = "" } = Astro.props;
   @media (max-width: 768px) {
     .hero {
       height: 800px;
-      /* DEBUG: Uncomment to see container bounds */
-      /* outline: 4px solid red; */
+      /* Stabilize fixed positioning during browser toolbar changes */
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      will-change: transform;
+      contain: layout style paint;
     }
 
     .hero-image {
       object-position: center center;
-      /* DEBUG: Uncomment to see image bounds */
-      /* outline: 4px solid blue; */
     }
 
     .hero-spacer {
       height: 800px;
+      /* Account for mobile browser bottom safe area */
+      padding-bottom: env(safe-area-inset-bottom, 0);
     }
   }
 </style>

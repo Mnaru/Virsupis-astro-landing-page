@@ -88,4 +88,15 @@ import ImageGallery from "../components/ImageGallery.astro";
     margin-top: -1px; /* Overlap to eliminate subpixel gap */
     padding-top: 1px; /* Compensate for negative margin */
   }
+
+  @media (max-width: 768px) {
+    .content-wrapper {
+      /* Stabilize during browser toolbar changes */
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      will-change: transform;
+      /* Account for mobile browser bottom safe area */
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+  }
 </style>
