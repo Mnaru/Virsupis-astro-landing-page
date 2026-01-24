@@ -181,150 +181,211 @@ import NavButton from "./NavButton.astro";
   const logo = document.getElementById("header-logo");
   const spacer = document.getElementById("header-spacer");
   const hamburger = document.getElementById("hamburger-btn");
+  const aboutSection = document.querySelector(".about-section");
 
   if (header && headerInner && logo && spacer) {
     // Logo aspect ratio (1392 / 202)
     const logoAspectRatio = 6.89;
-    const mobileBreakpoint = 768;
-
-    const isMobile = () => window.innerWidth <= mobileBreakpoint;
 
     // Desktop: Get expanded logo width (CSS: calc(100vw - 48px), max 1392px)
-    const getExpandedLogoWidth = () => {
-      if (isMobile()) {
+    const getExpandedLogoWidth = (mobile: boolean) => {
+      if (mobile) {
         return window.innerWidth - 32; // Mobile: full width minus 16px padding each side
       }
       return Math.min(window.innerWidth - 48, 1392);
     };
 
     // Calculate header height based on logo height + spacing
-    const getExpandedHeight = () => {
-      const logoWidth = getExpandedLogoWidth();
+    const getExpandedHeight = (mobile: boolean) => {
+      const logoWidth = getExpandedLogoWidth(mobile);
       const logoHeight = logoWidth / logoAspectRatio;
-      if (isMobile()) {
+      if (mobile) {
         return 32 + logoHeight; // 16px padding top + logo + 16px padding bottom
       }
       return 16 + 37 + logoHeight + 16; // Desktop: top padding + logo margin-top + logo height + bottom padding
     };
 
-    const getSpacerHeight = () => {
-      return getExpandedHeight() + 16;
+    const getSpacerHeight = (mobile: boolean) => {
+      return getExpandedHeight(mobile) + 16;
     };
 
     // Collapsed state values
-    const getCollapsedLogoWidth = () => {
-      if (isMobile()) {
+    const getCollapsedLogoWidth = (mobile: boolean) => {
+      if (mobile) {
         return 180; // Smaller logo on mobile collapsed
       }
       return 318; // Desktop collapsed
     };
 
-    const getCollapsedHeight = () => {
-      if (isMobile()) {
+    const getCollapsedHeight = (mobile: boolean) => {
+      if (mobile) {
         return 56; // Mobile collapsed header height
       }
       return 63; // Desktop collapsed
     };
 
-    const getCollapsedSpacerHeight = () => {
-      if (isMobile()) {
+    const getCollapsedSpacerHeight = (mobile: boolean) => {
+      if (mobile) {
         return 72;
       }
       return 79;
     };
 
-    const getCollapsedMarginTop = () => {
-      const collapsedLogoWidth = getCollapsedLogoWidth();
+    const getCollapsedMarginTop = (mobile: boolean) => {
+      const collapsedLogoWidth = getCollapsedLogoWidth(mobile);
       const collapsedLogoHeight = collapsedLogoWidth / logoAspectRatio;
-      const collapsedHeight = getCollapsedHeight();
-      if (isMobile()) {
+      const collapsedHeight = getCollapsedHeight(mobile);
+      if (mobile) {
         return 0; // No margin on mobile
       }
       return (collapsedHeight - collapsedLogoHeight) / 2 - 16;
     };
 
     // Set initial state (expanded)
-    const setInitialState = () => {
+    const setInitialState = (mobile: boolean) => {
       gsap.set(logo, {
-        width: getExpandedLogoWidth(),
-        marginTop: isMobile() ? 0 : 37,
+        width: getExpandedLogoWidth(mobile),
+        marginTop: mobile ? 0 : 37,
         x: 0,
       });
-      gsap.set(headerInner, { height: getExpandedHeight() });
-      gsap.set(spacer, { height: getSpacerHeight() });
+      gsap.set(headerInner, { height: getExpandedHeight(mobile) });
+      gsap.set(spacer, { height: getSpacerHeight(mobile) });
       if (hamburger) {
         gsap.set(hamburger, { opacity: 0 });
       }
     };
 
-    setInitialState();
+    // Use matchMedia for different triggers on mobile vs desktop
+    ScrollTrigger.matchMedia({
+      // Desktop: trigger immediately on scroll
+      "(min-width: 769px)": function () {
+        setInitialState(false);
 
-    // Create scroll-linked animation
-    const scrollTriggerDistance = 100;
+        const scrollTriggerDistance = 100;
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: document.body,
-        start: "top top",
-        end: `+=${scrollTriggerDistance}`,
-        scrub: 0.5,
-        invalidateOnRefresh: true,
-        onRefresh: () => {
-          if (window.scrollY === 0) {
-            setInitialState();
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: document.body,
+            start: "top top",
+            end: `+=${scrollTriggerDistance}`,
+            scrub: 0.5,
+            invalidateOnRefresh: true,
+            onRefresh: () => {
+              if (window.scrollY === 0) {
+                setInitialState(false);
+              }
+            },
+          },
+        });
+
+        // Animate from expanded to collapsed
+        tl.fromTo(
+          logo,
+          {
+            width: () => getExpandedLogoWidth(false),
+            marginTop: 37,
+            x: 0,
+          },
+          {
+            width: () => getCollapsedLogoWidth(false),
+            marginTop: () => getCollapsedMarginTop(false),
+            x: 0,
+            ease: "none",
+          },
+          0
+        )
+          .fromTo(
+            headerInner,
+            {
+              height: () => getExpandedHeight(false),
+            },
+            {
+              height: () => getCollapsedHeight(false),
+              ease: "none",
+            },
+            0
+          )
+          .fromTo(
+            spacer,
+            {
+              height: () => getSpacerHeight(false),
+            },
+            {
+              height: () => getCollapsedSpacerHeight(false),
+              ease: "none",
+            },
+            0
+          );
+      },
+
+      // Mobile: trigger when About section enters viewport
+      "(max-width: 768px)": function () {
+        setInitialState(true);
+
+        if (aboutSection) {
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: aboutSection,
+              start: "top bottom", // When top of About hits bottom of viewport
+              end: "top 70%", // When top of About is 70% from top of viewport
+              scrub: 0.5,
+              invalidateOnRefresh: true,
+              onRefresh: () => {
+                // Check if we're above the About section
+                const aboutTop = aboutSection.getBoundingClientRect().top;
+                if (aboutTop > window.innerHeight) {
+                  setInitialState(true);
+                }
+              },
+            },
+          });
+
+          // Animate from expanded to collapsed
+          tl.fromTo(
+            logo,
+            {
+              width: () => getExpandedLogoWidth(true),
+              marginTop: 0,
+              x: 0,
+            },
+            {
+              width: () => getCollapsedLogoWidth(true),
+              marginTop: 0,
+              x: () => -(window.innerWidth - 32 - getCollapsedLogoWidth(true)) / 2,
+              ease: "none",
+            },
+            0
+          )
+            .fromTo(
+              headerInner,
+              {
+                height: () => getExpandedHeight(true),
+              },
+              {
+                height: () => getCollapsedHeight(true),
+                ease: "none",
+              },
+              0
+            )
+            .fromTo(
+              spacer,
+              {
+                height: () => getSpacerHeight(true),
+              },
+              {
+                height: () => getCollapsedSpacerHeight(true),
+                ease: "none",
+              },
+              0
+            );
+
+          // Animate hamburger on mobile
+          if (hamburger) {
+            tl.fromTo(hamburger, { opacity: 0 }, { opacity: 1, ease: "none" }, 0);
           }
-        },
+        }
       },
     });
-
-    // Animate from expanded to collapsed
-    tl.fromTo(
-      logo,
-      {
-        width: () => getExpandedLogoWidth(),
-        marginTop: () => (isMobile() ? 0 : 37),
-        x: 0,
-      },
-      {
-        width: () => getCollapsedLogoWidth(),
-        marginTop: () => getCollapsedMarginTop(),
-        x: () => (isMobile() ? -(window.innerWidth - 32 - getCollapsedLogoWidth()) / 2 : 0),
-        ease: "none",
-      },
-      0
-    )
-      .fromTo(
-        headerInner,
-        {
-          height: () => getExpandedHeight(),
-        },
-        {
-          height: () => getCollapsedHeight(),
-          ease: "none",
-        },
-        0
-      )
-      .fromTo(
-        spacer,
-        {
-          height: () => getSpacerHeight(),
-        },
-        {
-          height: () => getCollapsedSpacerHeight(),
-          ease: "none",
-        },
-        0
-      );
-
-    // Animate hamburger on mobile
-    if (hamburger) {
-      tl.fromTo(
-        hamburger,
-        { opacity: 0 },
-        { opacity: 1, ease: "none" },
-        0
-      );
-    }
 
     // Refresh ScrollTrigger after setup to ensure proper initialization on mobile
     ScrollTrigger.refresh();
