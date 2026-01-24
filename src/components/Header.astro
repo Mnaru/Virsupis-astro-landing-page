@@ -157,9 +157,11 @@ import NavButton from "./NavButton.astro";
       /* GSAP will handle width and position animation */
     }
 
-    /* Show hamburger on mobile */
+    /* Show hamburger on mobile - EXPANDED STATE (default on load) */
     .hamburger-btn {
       display: flex;
+      opacity: 0; /* Hidden in expanded state - GSAP animates to visible */
+      pointer-events: none;
     }
   }
 </style>
@@ -334,7 +336,7 @@ import NavButton from "./NavButton.astro";
         gsap.set(headerInner, { height: expandedHeight });
         gsap.set(spacer, { height: expandedSpacerHeight });
         if (hamburger) {
-          gsap.set(hamburger, { opacity: 0 }); // Hidden in expanded state
+          gsap.set(hamburger, { opacity: 0, pointerEvents: "none" }); // Hidden in expanded state
         }
 
         if (aboutSection) {
@@ -347,23 +349,27 @@ import NavButton from "./NavButton.astro";
           };
 
           // Animate TO collapsed state (from initial state set above)
+          // immediateRender: false prevents GSAP from rendering "to" values on load
           gsap.to(logo, {
             width: collapsedLogoWidth,
             marginTop: 0,
             x: collapsedX,
             ease: "none",
+            immediateRender: false,
             scrollTrigger: scrollConfig,
           });
 
           gsap.to(headerInner, {
             height: collapsedHeight,
             ease: "none",
+            immediateRender: false,
             scrollTrigger: { ...scrollConfig },
           });
 
           gsap.to(spacer, {
             height: collapsedSpacerHeight,
             ease: "none",
+            immediateRender: false,
             scrollTrigger: { ...scrollConfig },
           });
 
@@ -371,7 +377,9 @@ import NavButton from "./NavButton.astro";
           if (hamburger) {
             gsap.to(hamburger, {
               opacity: 1,
+              pointerEvents: "auto",
               ease: "none",
+              immediateRender: false,
               scrollTrigger: { ...scrollConfig },
             });
           }
