@@ -27,7 +27,13 @@ const { image, mobileImage, alt = "" } = Astro.props;
     height: 850px;
     overflow: hidden;
     z-index: 1;
-    background-color: #000; /* Black background revealed as image fades */
+    background-color: #000;
+  }
+
+  .hero picture {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 
   .hero-image {
@@ -36,34 +42,12 @@ const { image, mobileImage, alt = "" } = Astro.props;
     object-fit: cover;
     object-position: center;
     transform-origin: center center;
-    /* Initial state - GSAP will animate opacity and scale */
   }
 
   .hero-spacer {
     height: 850px;
     position: relative;
     z-index: 1;
-  }
-
-  /* Mobile - aspect ratio based sizing to show more of the image */
-  @media (max-width: 768px) {
-    .hero {
-      height: auto;
-      aspect-ratio: 2 / 3;
-      max-height: 100svh;
-    }
-
-    .hero-image {
-      width: 100%;
-      height: auto;
-      object-fit: unset;
-    }
-
-    .hero-spacer {
-      height: auto;
-      aspect-ratio: 2 / 3;
-      max-height: 100svh;
-    }
   }
 </style>
 
