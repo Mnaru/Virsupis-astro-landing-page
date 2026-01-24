@@ -21,12 +21,6 @@ import NavButton from "./NavButton.astro";
       <Logo class="logo-img" />
     </a>
 
-    <!-- Hamburger menu icon (mobile only) -->
-    <button id="hamburger-btn" class="hamburger-btn" aria-label="Atidaryti meniu" aria-expanded="false">
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
-    </button>
   </div>
 </header>
 
@@ -94,75 +88,7 @@ import NavButton from "./NavButton.astro";
     /* Initial height set by GSAP */
   }
 
-  /* Hamburger button - hidden on desktop */
-  .hamburger-btn {
-    display: none;
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 24px;
-    height: 18px;
-    padding: 0;
-    background: none;
-    border: none;
-    cursor: pointer;
-    flex-direction: column;
-    justify-content: space-between;
-    z-index: 3;
-    opacity: 0; /* Will be animated by GSAP */
-  }
 
-  .hamburger-line {
-    display: block;
-    width: 100%;
-    height: 2px;
-    background-color: var(--color-black, #161514);
-    border-radius: 1px;
-  }
-
-  /* Mobile styles */
-  @media (max-width: 768px) {
-    .header {
-      position: fixed;
-      top: env(safe-area-inset-top, 0px);
-      left: 0;
-      right: 0;
-      z-index: 100;
-      /* GPU compositing for iOS address bar tracking */
-      -webkit-transform: translate3d(0, 0, 0);
-      transform: translate3d(0, 0, 0);
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-    }
-
-    .header-inner {
-      padding: 16px;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-    }
-
-    /* Hide desktop nav items on mobile */
-    .nav-left,
-    .nav-right {
-      display: none;
-    }
-
-    /* Logo - full width in expanded, animated by GSAP */
-    .header-logo {
-      width: calc(100vw - 32px);
-      max-width: none;
-      margin-top: 0;
-      /* GSAP will handle width and position animation */
-    }
-
-    /* Hamburger - starts hidden (opacity 0), GSAP animates to visible */
-    .hamburger-btn {
-      display: flex;
-      opacity: 0; /* GSAP will animate this */
-    }
-  }
 </style>
 
 <script>
@@ -181,194 +107,108 @@ import NavButton from "./NavButton.astro";
   const headerInner = document.getElementById("header-inner");
   const logo = document.getElementById("header-logo");
   const spacer = document.getElementById("header-spacer");
-  const hamburger = document.getElementById("hamburger-btn");
-  const aboutSection = document.querySelector(".about-section");
 
   if (header && headerInner && logo && spacer) {
     // Logo aspect ratio (1392 / 202)
     const logoAspectRatio = 6.89;
 
-    // Desktop: Get expanded logo width (CSS: calc(100vw - 48px), max 1392px)
-    const getExpandedLogoWidth = (mobile: boolean) => {
-      if (mobile) {
-        return window.innerWidth - 32; // Mobile: full width minus 16px padding each side
-      }
+    // Get expanded logo width (CSS: calc(100vw - 48px), max 1392px)
+    const getExpandedLogoWidth = () => {
       return Math.min(window.innerWidth - 48, 1392);
     };
 
     // Calculate header height based on logo height + spacing
-    const getExpandedHeight = (mobile: boolean) => {
-      const logoWidth = getExpandedLogoWidth(mobile);
+    const getExpandedHeight = () => {
+      const logoWidth = getExpandedLogoWidth();
       const logoHeight = logoWidth / logoAspectRatio;
-      if (mobile) {
-        return 32 + logoHeight; // 16px padding top + logo + 16px padding bottom
-      }
-      return 16 + 37 + logoHeight + 16; // Desktop: top padding + logo margin-top + logo height + bottom padding
+      return 16 + 37 + logoHeight + 16; // top padding + logo margin-top + logo height + bottom padding
     };
 
-    const getSpacerHeight = (mobile: boolean) => {
-      return getExpandedHeight(mobile) + 16;
+    const getSpacerHeight = () => {
+      return getExpandedHeight() + 16;
     };
 
     // Collapsed state values
-    const getCollapsedLogoWidth = (mobile: boolean) => {
-      if (mobile) {
-        return 180; // Smaller logo on mobile collapsed
-      }
-      return 318; // Desktop collapsed
-    };
+    const getCollapsedLogoWidth = () => 318;
+    const getCollapsedHeight = () => 63;
+    const getCollapsedSpacerHeight = () => 79;
 
-    const getCollapsedHeight = (mobile: boolean) => {
-      if (mobile) {
-        return 56; // Mobile collapsed header height
-      }
-      return 63; // Desktop collapsed
-    };
-
-    const getCollapsedSpacerHeight = (mobile: boolean) => {
-      if (mobile) {
-        return 72;
-      }
-      return 79;
-    };
-
-    const getCollapsedMarginTop = (mobile: boolean) => {
-      const collapsedLogoWidth = getCollapsedLogoWidth(mobile);
+    const getCollapsedMarginTop = () => {
+      const collapsedLogoWidth = getCollapsedLogoWidth();
       const collapsedLogoHeight = collapsedLogoWidth / logoAspectRatio;
-      const collapsedHeight = getCollapsedHeight(mobile);
-      if (mobile) {
-        return 0; // No margin on mobile
-      }
+      const collapsedHeight = getCollapsedHeight();
       return (collapsedHeight - collapsedLogoHeight) / 2 - 16;
     };
 
     // Set initial state (expanded)
-    const setInitialState = (mobile: boolean) => {
+    const setInitialState = () => {
       gsap.set(logo, {
-        width: getExpandedLogoWidth(mobile),
-        marginTop: mobile ? 0 : 37,
+        width: getExpandedLogoWidth(),
+        marginTop: 37,
         x: 0,
       });
-      gsap.set(headerInner, { height: getExpandedHeight(mobile) });
-      gsap.set(spacer, { height: getSpacerHeight(mobile) });
-      if (hamburger) {
-        gsap.set(hamburger, { opacity: 0 });
-      }
+      gsap.set(headerInner, { height: getExpandedHeight() });
+      gsap.set(spacer, { height: getSpacerHeight() });
     };
 
-    // Use matchMedia for different triggers on mobile vs desktop
-    ScrollTrigger.matchMedia({
-      // Desktop: trigger immediately on scroll
-      "(min-width: 769px)": function () {
-        setInitialState(false);
+    // Set initial state
+    setInitialState();
 
-        const scrollTriggerDistance = 100;
+    const scrollTriggerDistance = 100;
 
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: document.body,
-            start: "top top",
-            end: `+=${scrollTriggerDistance}`,
-            scrub: 0.5,
-            invalidateOnRefresh: true,
-            onRefresh: () => {
-              if (window.scrollY === 0) {
-                setInitialState(false);
-              }
-            },
-          },
-        });
-
-        // Animate from expanded to collapsed
-        tl.fromTo(
-          logo,
-          {
-            width: () => getExpandedLogoWidth(false),
-            marginTop: 37,
-            x: 0,
-          },
-          {
-            width: () => getCollapsedLogoWidth(false),
-            marginTop: () => getCollapsedMarginTop(false),
-            x: 0,
-            ease: "none",
-          },
-          0
-        )
-          .fromTo(
-            headerInner,
-            {
-              height: () => getExpandedHeight(false),
-            },
-            {
-              height: () => getCollapsedHeight(false),
-              ease: "none",
-            },
-            0
-          )
-          .fromTo(
-            spacer,
-            {
-              height: () => getSpacerHeight(false),
-            },
-            {
-              height: () => getCollapsedSpacerHeight(false),
-              ease: "none",
-            },
-            0
-          );
-      },
-
-      // Mobile: trigger when About section enters viewport
-      "(max-width: 768px)": function () {
-        // Set initial expanded state
-        setInitialState(true);
-
-        if (aboutSection) {
-          const collapsedLogoWidth = getCollapsedLogoWidth(true);
-          const collapsedX = -(window.innerWidth - 32 - collapsedLogoWidth) / 2;
-
-          // Shared ScrollTrigger config
-          const scrollConfig = {
-            trigger: aboutSection,
-            start: "top bottom",
-            end: "top 70%",
-            scrub: 0.5,
-          };
-
-          // Logo: shrink and move left
-          gsap.to(logo, {
-            width: collapsedLogoWidth,
-            x: collapsedX,
-            ease: "none",
-            scrollTrigger: scrollConfig,
-          });
-
-          // Header inner height
-          gsap.to(headerInner, {
-            height: getCollapsedHeight(true),
-            ease: "none",
-            scrollTrigger: { ...scrollConfig },
-          });
-
-          // Spacer height
-          gsap.to(spacer, {
-            height: getCollapsedSpacerHeight(true),
-            ease: "none",
-            scrollTrigger: { ...scrollConfig },
-          });
-
-          // Hamburger: fade in
-          if (hamburger) {
-            gsap.to(hamburger, {
-              opacity: 1,
-              ease: "none",
-              scrollTrigger: { ...scrollConfig },
-            });
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: document.body,
+        start: "top top",
+        end: `+=${scrollTriggerDistance}`,
+        scrub: 0.5,
+        invalidateOnRefresh: true,
+        onRefresh: () => {
+          if (window.scrollY === 0) {
+            setInitialState();
           }
-        }
+        },
       },
     });
+
+    // Animate from expanded to collapsed
+    tl.fromTo(
+      logo,
+      {
+        width: () => getExpandedLogoWidth(),
+        marginTop: 37,
+        x: 0,
+      },
+      {
+        width: () => getCollapsedLogoWidth(),
+        marginTop: () => getCollapsedMarginTop(),
+        x: 0,
+        ease: "none",
+      },
+      0
+    )
+      .fromTo(
+        headerInner,
+        {
+          height: () => getExpandedHeight(),
+        },
+        {
+          height: () => getCollapsedHeight(),
+          ease: "none",
+        },
+        0
+      )
+      .fromTo(
+        spacer,
+        {
+          height: () => getSpacerHeight(),
+        },
+        {
+          height: () => getCollapsedSpacerHeight(),
+          ease: "none",
+        },
+        0
+      );
 
     // Refresh ScrollTrigger after setup to ensure proper initialization on mobile
     ScrollTrigger.refresh();
