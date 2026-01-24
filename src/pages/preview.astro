@@ -85,5 +85,7 @@ import ImageGallery from "../components/ImageGallery.astro";
     position: relative;
     z-index: 2;
     background-color: var(--color-white, #f8f4ee);
+    margin-top: -1px; /* Overlap to eliminate subpixel gap */
+    padding-top: 1px; /* Compensate for negative margin */
   }
 </style>
