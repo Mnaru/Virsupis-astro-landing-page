@@ -129,6 +129,9 @@ import NavButton from "./NavButton.astro";
       left: 0;
       right: 0;
       z-index: 100;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      will-change: transform;
     }
 
     .header-inner {
@@ -164,6 +167,11 @@ import NavButton from "./NavButton.astro";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
 
   gsap.registerPlugin(ScrollTrigger);
+
+  // Prevent scroll recalculation on mobile toolbar show/hide
+  ScrollTrigger.config({
+    ignoreMobileResize: true,
+  });
 
   // Get elements
   const header = document.getElementById("site-header");
