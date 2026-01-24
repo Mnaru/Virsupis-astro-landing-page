@@ -320,7 +320,22 @@ import NavButton from "./NavButton.astro";
 
       // Mobile: trigger when About section enters viewport
       "(max-width: 768px)": function () {
-        setInitialState(true);
+        // Calculate initial values once for this breakpoint
+        const expandedLogoWidth = getExpandedLogoWidth(true);
+        const collapsedLogoWidth = getCollapsedLogoWidth(true);
+        const expandedHeight = getExpandedHeight(true);
+        const collapsedHeight = getCollapsedHeight(true);
+        const expandedSpacerHeight = getSpacerHeight(true);
+        const collapsedSpacerHeight = getCollapsedSpacerHeight(true);
+        const collapsedX = -(window.innerWidth - 32 - collapsedLogoWidth) / 2;
+
+        // Set initial expanded state
+        gsap.set(logo, { width: expandedLogoWidth, marginTop: 0, x: 0 });
+        gsap.set(headerInner, { height: expandedHeight });
+        gsap.set(spacer, { height: expandedSpacerHeight });
+        if (hamburger) {
+          gsap.set(hamburger, { opacity: 0 });
+        }
 
         if (aboutSection) {
           const tl = gsap.timeline({
@@ -329,53 +344,26 @@ import NavButton from "./NavButton.astro";
               start: "top bottom", // When top of About hits bottom of viewport
               end: "top 70%", // When top of About is 70% from top of viewport
               scrub: 0.5,
-              invalidateOnRefresh: true,
-              onRefresh: () => {
-                // Check if we're above the About section
-                const aboutTop = aboutSection.getBoundingClientRect().top;
-                if (aboutTop > window.innerHeight) {
-                  setInitialState(true);
-                }
-              },
             },
           });
 
-          // Animate from expanded to collapsed
+          // Animate from expanded to collapsed (use static values for reliable reverse)
           tl.fromTo(
             logo,
-            {
-              width: () => getExpandedLogoWidth(true),
-              marginTop: 0,
-              x: 0,
-            },
-            {
-              width: () => getCollapsedLogoWidth(true),
-              marginTop: 0,
-              x: () => -(window.innerWidth - 32 - getCollapsedLogoWidth(true)) / 2,
-              ease: "none",
-            },
+            { width: expandedLogoWidth, marginTop: 0, x: 0 },
+            { width: collapsedLogoWidth, marginTop: 0, x: collapsedX, ease: "none" },
             0
           )
             .fromTo(
               headerInner,
-              {
-                height: () => getExpandedHeight(true),
-              },
-              {
-                height: () => getCollapsedHeight(true),
-                ease: "none",
-              },
+              { height: expandedHeight },
+              { height: collapsedHeight, ease: "none" },
               0
             )
             .fromTo(
               spacer,
-              {
-                height: () => getSpacerHeight(true),
-              },
-              {
-                height: () => getCollapsedSpacerHeight(true),
-                ease: "none",
-              },
+              { height: expandedSpacerHeight },
+              { height: collapsedSpacerHeight, ease: "none" },
               0
             );
 
