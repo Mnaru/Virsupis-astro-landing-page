@@ -123,6 +123,14 @@ import NavButton from "./NavButton.astro";
 
   /* Mobile styles */
   @media (max-width: 768px) {
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+    }
+
     .header-inner {
       padding: 16px;
       flex-direction: row;
