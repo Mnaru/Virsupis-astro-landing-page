@@ -48,6 +48,11 @@ const { image, alt = "" } = Astro.props;
 
   gsap.registerPlugin(ScrollTrigger);
 
+  // Prevent scroll recalculation on mobile toolbar show/hide
+  ScrollTrigger.config({
+    ignoreMobileResize: true,
+  });
+
   const heroImage = document.getElementById("hero-image");
   const heroSpacer = document.getElementById("hero-spacer");
 
@@ -65,9 +70,9 @@ const { image, alt = "" } = Astro.props;
         ease: "none",
         scrollTrigger: {
           trigger: heroSpacer,
-          start: "top top", // Start when spacer top reaches viewport top
-          end: "bottom top", // End when spacer bottom reaches viewport top (hero fully covered)
-          scrub: 0.5, // Smooth scrubbing
+          start: "top top",
+          end: "bottom top",
+          scrub: 0.5,
         },
       }
     );
