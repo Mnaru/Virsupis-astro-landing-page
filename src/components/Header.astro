@@ -157,11 +157,20 @@ import NavButton from "./NavButton.astro";
       /* GSAP will handle width and position animation */
     }
 
-    /* Show hamburger on mobile - EXPANDED STATE (default on load) */
+    /* EXPANDED STATE (default on load) — hamburger completely hidden */
     .hamburger-btn {
-      display: flex;
-      opacity: 0; /* Hidden in expanded state - GSAP animates to visible */
+      display: none; /* Completely hidden - not just opacity */
+      visibility: hidden;
+      opacity: 0;
       pointer-events: none;
+    }
+
+    /* COLLAPSED STATE — hamburger visible (class added by GSAP) */
+    .header.collapsed .hamburger-btn {
+      display: flex;
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
     }
 
     /* Prevent CSS transitions from interfering with GSAP */
@@ -330,89 +339,67 @@ import NavButton from "./NavButton.astro";
 
       // Mobile: trigger when About section enters viewport
       "(max-width: 768px)": function () {
-        // Calculate values once for this breakpoint
-        const expandedLogoWidth = getExpandedLogoWidth(true);
+        // Calculate collapsed state values
         const collapsedLogoWidth = getCollapsedLogoWidth(true);
-        const expandedHeight = getExpandedHeight(true);
         const collapsedHeight = getCollapsedHeight(true);
-        const expandedSpacerHeight = getSpacerHeight(true);
         const collapsedSpacerHeight = getCollapsedSpacerHeight(true);
         const collapsedX = -(window.innerWidth - 32 - collapsedLogoWidth) / 2;
+
+        // Calculate expanded state values for heights
+        const expandedHeight = getExpandedHeight(true);
+        const expandedSpacerHeight = getSpacerHeight(true);
 
         // Kill any existing tweens to prevent conflicts
         gsap.killTweensOf(logo);
         gsap.killTweensOf(headerInner);
         gsap.killTweensOf(spacer);
-        if (hamburger) gsap.killTweensOf(hamburger);
 
-        // SET INITIAL STATE (expanded) — runs immediately on load
-        gsap.set(logo, { width: expandedLogoWidth, marginTop: 0, x: 0, opacity: 1 });
+        // Ensure header starts without collapsed class — CSS handles hamburger visibility
+        header?.classList.remove("collapsed");
+
+        // Set initial HEIGHTS only — CSS handles logo width and hamburger visibility
+        // Heights need JS calculation based on viewport and logo aspect ratio
         gsap.set(headerInner, { height: expandedHeight });
         gsap.set(spacer, { height: expandedSpacerHeight });
-        if (hamburger) {
-          gsap.set(hamburger, { opacity: 0, pointerEvents: "none" }); // Hidden in expanded state
-        }
 
         if (aboutSection) {
-          // Shared ScrollTrigger config
-          const scrollConfig = {
+          // ScrollTrigger for class toggle (controls hamburger visibility via CSS)
+          ScrollTrigger.create({
             trigger: aboutSection,
-            start: "top bottom", // When top of About hits bottom of viewport
-            end: "top 70%", // When top of About is 70% from top of viewport
+            start: "top bottom",
+            onEnter: () => header?.classList.add("collapsed"),
+            onLeaveBack: () => header?.classList.remove("collapsed"),
+          });
+
+          // Shared scrub config for smooth animations
+          const scrubConfig = {
+            trigger: aboutSection,
+            start: "top bottom",
+            end: "top 70%",
             scrub: 0.5,
           };
 
-          // Use fromTo with immediateRender: true to ensure FROM state renders immediately
-          gsap.fromTo(
-            logo,
-            { width: expandedLogoWidth, marginTop: 0, x: 0, opacity: 1 },
-            {
-              width: collapsedLogoWidth,
-              marginTop: 0,
-              x: collapsedX,
-              opacity: 1,
-              ease: "none",
-              immediateRender: true,
-              scrollTrigger: scrollConfig,
-            }
-          );
+          // Logo: animate from CSS default (full width) to collapsed
+          gsap.to(logo, {
+            width: collapsedLogoWidth,
+            x: collapsedX,
+            ease: "none",
+            scrollTrigger: scrubConfig,
+          });
 
-          gsap.fromTo(
-            headerInner,
-            { height: expandedHeight },
-            {
-              height: collapsedHeight,
-              ease: "none",
-              immediateRender: true,
-              scrollTrigger: { ...scrollConfig },
-            }
-          );
+          // Header inner height
+          gsap.to(headerInner, {
+            height: collapsedHeight,
+            ease: "none",
+            scrollTrigger: { ...scrubConfig },
+          });
 
-          gsap.fromTo(
-            spacer,
-            { height: expandedSpacerHeight },
-            {
-              height: collapsedSpacerHeight,
-              ease: "none",
-              immediateRender: true,
-              scrollTrigger: { ...scrollConfig },
-            }
-          );
-
-          // Animate hamburger: hidden (0) → visible (1)
-          if (hamburger) {
-            gsap.fromTo(
-              hamburger,
-              { opacity: 0, pointerEvents: "none" },
-              {
-                opacity: 1,
-                pointerEvents: "auto",
-                ease: "none",
-                immediateRender: true,
-                scrollTrigger: { ...scrollConfig },
-              }
-            );
-          }
+          // Spacer height
+          gsap.to(spacer, {
+            height: collapsedSpacerHeight,
+            ease: "none",
+            scrollTrigger: { ...scrubConfig },
+          });
         }
       },
     });
