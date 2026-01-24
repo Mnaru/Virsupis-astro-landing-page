@@ -49,6 +49,20 @@ const { image, mobileImage, alt = "" } = Astro.props;
     position: relative;
     z-index: 1;
   }
+
+  @media (max-width: 768px) {
+    .hero {
+      height: 650px;
+    }
+
+    .hero-image {
+      object-position: center bottom;
+    }
+
+    .hero-spacer {
+      height: 650px;
+    }
+  }
 </style>
 
 <script>
