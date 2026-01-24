@@ -11,11 +11,16 @@ import ImageGallery from "../components/ImageGallery.astro";
 ---
 
 <BaseLayout title="Viršupis — Privatus namų kvartalas Vilniuje">
-  <link slot="head" rel="preload" as="image" href="/images/Hero image.png" />
+  <link slot="head" rel="preload" as="image" href="/images/Hero image.png" media="(min-width: 769px)" />
+  <link slot="head" rel="preload" as="image" href="/images/Hero image mobile.jpeg" media="(max-width: 768px)" />
   <Header />
 
   <main>
-    <Hero image="/images/Hero image.png" alt="Viršupis - privatus namų kvartalas" />
+    <Hero
+      image="/images/Hero image.png"
+      mobileImage="/images/Hero image mobile.jpeg"
+      alt="Viršupis - privatus namų kvartalas"
+    />
 
     <!-- Content wrapper - scrolls over fixed hero -->
     <div class="content-wrapper">

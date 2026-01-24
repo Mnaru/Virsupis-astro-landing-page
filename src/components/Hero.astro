@@ -1,14 +1,18 @@
 ---
 interface Props {
   image: string;
+  mobileImage?: string;
   alt?: string;
 }
 
-const { image, alt = "" } = Astro.props;
+const { image, mobileImage, alt = "" } = Astro.props;
 ---
 
 <section class="hero">
-  <img id="hero-image" src={image} alt={alt} class="hero-image" loading="eager" fetchpriority="high" />
+  <picture>
+    {mobileImage && <source media="(max-width: 768px)" srcset={mobileImage} />}
+    <img id="hero-image" src={image} alt={alt} class="hero-image" loading="eager" fetchpriority="high" />
+  </picture>
 </section>
 
 <!-- Spacer to push content below fixed hero -->
@@ -39,6 +43,21 @@ const { image, alt = "" } = Astro.props;
     height: 850px;
     position: relative;
     z-index: 1;
+  }
+
+  /* Mobile - full viewport height with adjusted image position */
+  @media (max-width: 768px) {
+    .hero {
+      height: 100svh;
+    }
+
+    .hero-image {
+      object-position: top center;
+    }
+
+    .hero-spacer {
+      height: 100svh;
+    }
   }
 </style>
 
