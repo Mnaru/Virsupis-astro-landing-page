@@ -125,6 +125,11 @@
         gsap.set(logoWrapper, { width: getExpandedLogoWidth() });
         gsap.set(menuBtn, { autoAlpha: 0 });
         gsap.set(spacer, { height: getExpandedHeight() });
+        gsap.set(header, {
+          height: getExpandedHeight(),
+          paddingTop: 24 + getSafeAreaTop(),
+          paddingBottom: 24
+        });
       };
 
       setInitialState();

@@ -17,7 +17,10 @@ import ImageGallery from "../components/ImageGallery.astro";
 
   <main>
     <TESThero />
-    <AboutSection />
+
+    <!-- Content wrapper - covers fixed hero -->
+    <div class="content-wrapper">
+      <AboutSection />
 
       <!-- Full Bleed Area Image -->
       <FullBleedImage src="/images/Area image.png" alt="Viršupis area overview" parallax={true} />
@@ -67,7 +70,16 @@ import ImageGallery from "../components/ImageGallery.astro";
         buttonHref="mailto:info@virsupis.com"
       />
 
-    <Footer />
+      <Footer />
+    </div>
   </main>
 </BaseLayout>
+
+<style>
+  .content-wrapper {
+    position: relative;
+    z-index: 2;
+    background-color: var(--color-white, #f8f4ee);
+  }
+</style>
 
