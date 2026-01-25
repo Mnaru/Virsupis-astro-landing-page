@@ -58,11 +58,6 @@ const currentYear = new Date().getFullYear();
 
 <style>
   .footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 2;
     background-color: #161514;
     color: var(--color-white, #f8f4ee);
     padding: 80px 24px 24px;
@@ -258,20 +253,3 @@ const currentYear = new Date().getFullYear();
   }
 </style>
 
-<script>
-  const footer = document.querySelector(".footer");
-  const contentWrapper = document.querySelector(".content-wrapper");
-
-  if (footer && contentWrapper) {
-    // Set content-wrapper margin to match footer height (margin is transparent, padding shows background)
-    const setFooterSpace = () => {
-      const footerHeight = (footer as HTMLElement).offsetHeight;
-      (contentWrapper as HTMLElement).style.marginBottom = footerHeight + "px";
-    };
-
-    setFooterSpace();
-
-    // Re-adjust on resize
-    window.addEventListener("resize", setFooterSpace);
-  }
-</script>

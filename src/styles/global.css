@@ -24,7 +24,7 @@
   }
 
   body {
-    background-color: #161514; /* Dark background for footer reveal effect */
+    background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-body);
     font-size: 14px;
