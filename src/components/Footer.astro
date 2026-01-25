@@ -297,6 +297,14 @@ const currentYear = new Date().getFullYear();
       start: () => "top " + (window.innerHeight - getOverlap()),
       end: () => "+=" + getOverlap(),
       pin: true,
+      onEnter: () => {
+        // Raise z-index above content when footer starts revealing
+        (footer as HTMLElement).style.zIndex = "15";
+      },
+      onLeaveBack: () => {
+        // Lower z-index back when scrolling back up
+        (footer as HTMLElement).style.zIndex = "5";
+      },
     });
 
     // Subtle scale/opacity animation as footer reveals
