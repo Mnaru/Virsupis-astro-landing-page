@@ -3,7 +3,7 @@ import Logo from "./Logo.astro";
 import NavButton from "./NavButton.astro";
 ---
 
-<header id="site-header" class="header">
+<header id="site-header" class="header hidden md:block">
   <div id="header-inner" class="header-inner">
     <!-- Menu items positioned absolutely - they never move (hidden on mobile) -->
     <nav class="nav-left" aria-label="Pagrindinė navigacija">
@@ -25,7 +25,7 @@ import NavButton from "./NavButton.astro";
 </header>
 
 <!-- Spacer to push content down -->
-<div id="header-spacer" class="header-spacer"></div>
+<div id="header-spacer" class="header-spacer hidden md:block"></div>
 
 <style>
   .header {
@@ -87,8 +87,6 @@ import NavButton from "./NavButton.astro";
   .header-spacer {
     /* Initial height set by GSAP */
   }
-
-
 </style>
 
 <script>
