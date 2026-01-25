@@ -14,6 +14,10 @@
 <div class="mobile-header-spacer"></div>
 
 <style>
+  :root {
+    --sat: env(safe-area-inset-top, 0px);
+  }
+
   .mobile-header {
     position: fixed;
     top: 0;
@@ -22,8 +26,11 @@
     z-index: 100;
     background-color: #F5F3EE;
     display: flex;
-    align-items: center;
-    padding: 24px 16px;
+    align-items: flex-start;
+    padding-top: calc(24px + env(safe-area-inset-top, 0px));
+    padding-right: 16px;
+    padding-bottom: 24px;
+    padding-left: 16px;
   }
 
   .mobile-logo-wrapper {
@@ -58,7 +65,7 @@
 
   .mobile-header-spacer {
     display: block;
-    height: 120px;
+    height: calc(120px + env(safe-area-inset-top, 0px));
   }
 
   @media (min-width: 768px) {
@@ -92,12 +99,26 @@
       const collapsedHeight = 63;
       const collapsedLogoWidth = 200;
 
+      // Get safe area inset from CSS
+      const getSafeAreaTop = () => {
+        const value = getComputedStyle(document.documentElement).getPropertyValue('--sat');
+        return value ? parseInt(value) : 0;
+      };
+
       const getExpandedLogoWidth = () => window.innerWidth - 32;
 
       const getExpandedHeight = () => {
         const logoWidth = getExpandedLogoWidth();
         const logoHeight = logoWidth / logoAspectRatio;
-        return 24 + logoHeight + 24;
+        const safeArea = getSafeAreaTop();
+        return 24 + safeArea + logoHeight + 24;
+      };
+
+      // Calculate collapsed padding to center the logo vertically
+      const getCollapsedPadding = () => {
+        const collapsedLogoHeight = collapsedLogoWidth / logoAspectRatio;
+        const verticalPadding = (collapsedHeight - collapsedLogoHeight) / 2;
+        return verticalPadding;
       };
 
       const setInitialState = () => {
@@ -136,14 +157,27 @@
         )
         .fromTo(
           header,
-          { height: getExpandedHeight(), padding: "24px 16px" },
-          { height: collapsedHeight, padding: "0 16px", ease: "none" },
+          {
+            height: getExpandedHeight(),
+            paddingTop: 24 + getSafeAreaTop(),
+            paddingBottom: 24,
+            paddingLeft: 16,
+            paddingRight: 16
+          },
+          {
+            height: collapsedHeight + getSafeAreaTop(),
+            paddingTop: getCollapsedPadding() + getSafeAreaTop(),
+            paddingBottom: getCollapsedPadding(),
+            paddingLeft: 16,
+            paddingRight: 16,
+            ease: "none"
+          },
           0
         )
         .fromTo(
           spacer,
           { height: getExpandedHeight() },
-          { height: collapsedHeight, ease: "none" },
+          { height: collapsedHeight + getSafeAreaTop(), ease: "none" },
           0
         );
 
