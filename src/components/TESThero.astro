@@ -81,14 +81,17 @@ const {
   const heroSpacer = document.querySelector('.test-hero-spacer');
 
   if (heroImage && heroSpacer) {
+    // Set initial zoom state
+    gsap.set(heroImage, { scale: 1.05 });
+
     ScrollTrigger.matchMedia({
       // Desktop (769px and up)
       "(min-width: 769px)": function() {
         gsap.fromTo(
           heroImage,
-          { scale: 1, opacity: 1 },
+          { scale: 1.05, opacity: 1 },
           {
-            scale: 0.95,
+            scale: 1.0,
             opacity: 0.3,
             ease: 'none',
             scrollTrigger: {
@@ -105,9 +108,9 @@ const {
       "(max-width: 768px)": function() {
         gsap.fromTo(
           heroImage,
-          { scale: 1, opacity: 1 },
+          { scale: 1.05, opacity: 1 },
           {
-            scale: 0.95,
+            scale: 1.0,
             opacity: 0.3,
             ease: 'none',
             scrollTrigger: {

@@ -1,19 +1,27 @@
 ---
 interface Props {
   src: string;
+  mobileSrc?: string;
   alt: string;
   parallax?: boolean;
   height?: number;
 }
 
-const { src, alt, parallax = false, height = 850 } = Astro.props;
+const { src, mobileSrc, alt, parallax = false, height = 850 } = Astro.props;
 ---
 
 <section
   class:list={["full-bleed-image", { "parallax-enabled": parallax }]}
   style={`height: ${height}px;`}
 >
-  <img src={src} alt={alt} loading="lazy" style={parallax ? `height: ${height}px;` : undefined} />
+  {mobileSrc ? (
+    <picture>
+      <source media="(max-width: 768px)" srcset={mobileSrc} />
+      <img src={src} alt={alt} loading="lazy" style={parallax ? `height: ${height}px;` : undefined} />
+    </picture>
+  ) : (
+    <img src={src} alt={alt} loading="lazy" style={parallax ? `height: ${height}px;` : undefined} />
+  )}
 </section>
 
 <style>
