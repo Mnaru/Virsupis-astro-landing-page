@@ -25,11 +25,18 @@ const {
   </picture>
 </section>
 
+<!-- Spacer to push content below fixed hero -->
+<div class="test-hero-spacer"></div>
+
 <style>
   .test-hero {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100vh;
+    z-index: 1;
+    background-color: black;
   }
 
   .test-hero-image {
@@ -37,6 +44,12 @@ const {
     height: 100%;
     object-fit: cover;
     object-position: center;
+  }
+
+  .test-hero-spacer {
+    height: 150vh;
+    position: relative;
+    z-index: 1;
   }
 
   @media (max-width: 768px) {
@@ -47,5 +60,45 @@ const {
     .test-hero-image {
       object-position: center bottom;
     }
+
+    .test-hero-spacer {
+      height: 150svh;
+    }
   }
 </style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  ScrollTrigger.config({
+    ignoreMobileResize: true,
+  });
+
+  const heroImage = document.querySelector('.test-hero-image');
+  const heroSpacer = document.querySelector('.test-hero-spacer');
+
+  if (heroImage && heroSpacer) {
+    gsap.fromTo(
+      heroImage,
+      {
+        scale: 1,
+        opacity: 1,
+      },
+      {
+        scale: 0.95,
+        opacity: 0.3,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroSpacer,
+          start: '40% top',
+          end: 'bottom top',
+          scrub: 0.5,
+          markers: true, // DEBUG: Remove after testing
+        }
+      }
+    );
+  }
+</script>
