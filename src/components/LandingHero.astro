@@ -80,12 +80,20 @@ const contactEmail = "mindaugas@virsupis.com";
     justify-content: space-between;
   }
 
-  /* Top nav: 3 items spread across */
+  /* Top nav: 3-column grid for true center alignment */
   .landing-hero-top-nav {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
     padding: 16px 24px 10px;
+  }
+
+  .landing-hero-top-nav .nav-link:first-child {
+    justify-self: start;
+  }
+
+  .landing-hero-top-nav .nav-link:last-child {
+    justify-self: end;
   }
 
   .nav-link {
@@ -121,6 +129,7 @@ const contactEmail = "mindaugas@virsupis.com";
   }
 
   .nav-icon {
+    justify-self: center;
     width: 28px;
     height: 27px;
     /* Convert SVG to cream color */
