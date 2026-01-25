@@ -324,30 +324,10 @@ const currentYear = new Date().getFullYear();
     }
   }
 
-  // Large logo: Simple fade in (slightly delayed)
+  // Large logo: Always visible (removed animation due to visibility issues)
   const footerLogoWrapper = document.querySelector('.footer-logo-wrapper');
   if (footerLogoWrapper) {
-    const rect = footerLogoWrapper.getBoundingClientRect();
-    const alreadyVisible = rect.top < window.innerHeight * 0.85;
-
-    if (alreadyVisible) {
-      gsap.set(footerLogoWrapper, { opacity: 1 });
-    } else {
-      gsap.fromTo(footerLogoWrapper,
-        { opacity: 0 },
-        {
-          opacity: 1,
-          duration: 0.8,
-          delay: 0.2,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: footerLogoWrapper,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-          }
-        }
-      );
-    }
+    gsap.set(footerLogoWrapper, { opacity: 1 });
   }
 
   // Disclaimer + copyright: No animation - always visible
