@@ -137,3 +137,58 @@ const features = [
     }
   }
 </style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Fade in for heading
+  const aboutHeading = document.querySelector('.about-heading');
+  if (aboutHeading) {
+    gsap.from(aboutHeading, {
+      opacity: 0,
+      duration: 0.6,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: aboutHeading,
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      }
+    });
+  }
+
+  // Fade in for description text
+  const aboutDescription = document.querySelector('.about-description');
+  if (aboutDescription) {
+    gsap.from(aboutDescription, {
+      opacity: 0,
+      duration: 0.6,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: aboutDescription,
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      }
+    });
+  }
+
+  // Staggered fade up for feature items
+  const featuresRow = document.querySelector('.features-row');
+  const featureItems = document.querySelectorAll('.feature');
+  if (featuresRow && featureItems.length > 0) {
+    gsap.from(featureItems, {
+      opacity: 0,
+      y: 30,
+      duration: 0.5,
+      ease: 'power2.out',
+      stagger: 0.15,
+      scrollTrigger: {
+        trigger: featuresRow,
+        start: 'top 80%',
+        toggleActions: 'play none none none',
+      }
+    });
+  }
+</script>

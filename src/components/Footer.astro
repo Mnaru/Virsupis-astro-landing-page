@@ -252,3 +252,104 @@ const currentYear = new Date().getFullYear();
     }
   }
 </style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const footer = document.querySelector('.footer');
+
+  // Description text + CTA button: Simple fade in
+  const footerDescription = document.querySelector('.footer-description');
+  const footerCta = document.querySelector('.footer-cta');
+  if (footer && (footerDescription || footerCta)) {
+    const elements = [footerDescription, footerCta].filter(Boolean);
+    const rect = footer.getBoundingClientRect();
+    const alreadyVisible = rect.top < window.innerHeight * 0.85;
+
+    if (alreadyVisible) {
+      gsap.set(elements, { opacity: 1 });
+    } else {
+      gsap.fromTo(elements,
+        { opacity: 0 },
+        {
+          opacity: 1,
+          duration: 0.6,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: footer,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          }
+        }
+      );
+    }
+  }
+
+  // Nav columns: Headers and links fade in one by one
+  const navColumns = document.querySelectorAll('.nav-column');
+  if (footer && navColumns.length > 0) {
+    // Collect all items from both columns in order
+    const allNavItems: Element[] = [];
+    navColumns.forEach((column) => {
+      const header = column.querySelector('.nav-header');
+      const links = column.querySelectorAll('.nav-link');
+      if (header) allNavItems.push(header);
+      links.forEach(link => allNavItems.push(link));
+    });
+
+    const rect = footer.getBoundingClientRect();
+    const alreadyVisible = rect.top < window.innerHeight * 0.8;
+
+    if (alreadyVisible) {
+      gsap.set(allNavItems, { opacity: 1, y: 0 });
+    } else {
+      gsap.fromTo(allNavItems,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          ease: 'power2.out',
+          stagger: 0.08,
+          scrollTrigger: {
+            trigger: footer,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          }
+        }
+      );
+    }
+  }
+
+  // Large logo: Simple fade in (slightly delayed)
+  const footerLogoWrapper = document.querySelector('.footer-logo-wrapper');
+  if (footerLogoWrapper) {
+    const rect = footerLogoWrapper.getBoundingClientRect();
+    const alreadyVisible = rect.top < window.innerHeight * 0.85;
+
+    if (alreadyVisible) {
+      gsap.set(footerLogoWrapper, { opacity: 1 });
+    } else {
+      gsap.fromTo(footerLogoWrapper,
+        { opacity: 0 },
+        {
+          opacity: 1,
+          duration: 0.8,
+          delay: 0.2,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: footerLogoWrapper,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          }
+        }
+      );
+    }
+  }
+
+  // Disclaimer + copyright: No animation - always visible
+  // (Removed animation as it caused visibility issues at bottom of page)
+</script>

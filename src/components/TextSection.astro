@@ -75,3 +75,43 @@ const { highlight, content } = Astro.props;
     }
   }
 </style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Fade in for text section content
+  const textSections = document.querySelectorAll('.text-section');
+  textSections.forEach((section) => {
+    const highlightText = section.querySelector('.highlight-text');
+    const bodyText = section.querySelector('.body-text');
+
+    if (highlightText) {
+      gsap.from(highlightText, {
+        opacity: 0,
+        duration: 0.6,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: highlightText,
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        }
+      });
+    }
+
+    if (bodyText) {
+      gsap.from(bodyText, {
+        opacity: 0,
+        duration: 0.6,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: bodyText,
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        }
+      });
+    }
+  });
+</script>
