@@ -1,57 +1,8 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Logo from "../components/Logo.astro";
-import ContactButton from "../components/ContactButton.astro";
-
-const email = "info@virsupis.com";
-const googleMapsUrl = "https://maps.app.goo.gl/VrLXHLc5Ni44R8rA6";
-const instagramUrl = "https://www.instagram.com/virsupis_vilnius/";
+import LandingHero from "../components/LandingHero.astro";
 ---
 
 <BaseLayout title="Viršupis — Privatus namų kvartalas Vilniuje">
-  <main class="min-h-screen flex items-center justify-center px-6 py-12">
-    <article class="text-center max-w-xl">
-      <header class="mb-12">
-        <Logo class="w-48 mx-auto mb-8" />
-      </header>
-
-      <section class="mb-16">
-        <p
-          class="text-lg md:text-xl leading-relaxed tracking-wide text-white/90"
-        >
-          Privatus 33 namų kvartalas Antakalnyje.
-          <br />
-          <span class="text-white/60">Pradžia — 2026.</span>
-        </p>
-      </section>
-
-      <nav aria-label="Pagrindinės nuorodos">
-        <ul class="flex flex-wrap items-center justify-center gap-8 md:gap-12">
-          <li>
-            <a
-              href={googleMapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-block text-white hover:text-[var(--color-accent)] transition-colors uppercase tracking-widest text-sm"
-            >
-              Adresas
-            </a>
-          </li>
-          <li>
-            <ContactButton email={email} />
-          </li>
-          <li>
-            <a
-              href={instagramUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-block text-white hover:text-[var(--color-accent)] transition-colors uppercase tracking-widest text-sm"
-            >
-              Instagram
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </article>
-  </main>
+  <LandingHero />
 </BaseLayout>

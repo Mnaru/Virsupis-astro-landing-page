@@ -1,0 +1,229 @@
+---
+interface Props {
+  backgroundImage?: string;
+  mobileBackgroundImage?: string;
+}
+
+const {
+  backgroundImage = "/images/LandingHero.png",
+  mobileBackgroundImage
+} = Astro.props;
+
+const addressUrl = "https://www.google.com/maps/place/Vir%C5%A1upis/@54.712918,25.3842278,21127m/data=!3m1!1e3!4m6!3m5!1s0x46dd97d12903b059:0x4da79be4d3041899!8m2!3d54.71485!4d25.36807!16s%2Fg%2F11yj34k7xd?entry=tts&g_ep=EgoyMDI1MDgxOS4wIPu8ASoASAFQAw%3D%3D&skid=00d9c5eb-adfb-4933-8362-b4f58ee43fea";
+const instagramUrl = "https://www.instagram.com/virsupis_vilnius/";
+const contactEmail = "mindaugas@virsupis.com";
+---
+
+<section class="landing-hero">
+  <!-- Background image -->
+  <picture>
+    {mobileBackgroundImage && (
+      <source media="(max-width: 768px)" srcset={mobileBackgroundImage} />
+    )}
+    <img
+      class="landing-hero-bg"
+      src={backgroundImage}
+      alt=""
+      loading="eager"
+      fetchpriority="high"
+    />
+  </picture>
+
+  <!-- Content -->
+  <div class="landing-hero-content">
+    <!-- Top nav row -->
+    <nav class="landing-hero-top-nav">
+      <a href={addressUrl} target="_blank" rel="noopener noreferrer" class="nav-link">ADRESAS</a>
+      <img src="/images/Virsupis icon.svg" alt="Viršupis" class="nav-icon" />
+      <a href={`mailto:${contactEmail}`} class="nav-link">KONTAKTAI</a>
+    </nav>
+
+    <!-- Center logo -->
+    <div class="landing-hero-logo-wrapper">
+      <div class="landing-hero-logo-container">
+        <img src="/images/logo.svg" alt="Viršupis" class="landing-hero-logo" />
+      </div>
+    </div>
+
+    <!-- Bottom nav -->
+    <nav class="landing-hero-bottom-nav">
+      <a href={instagramUrl} target="_blank" rel="noopener noreferrer" class="nav-link">INSTAGRAM</a>
+    </nav>
+  </div>
+</section>
+
+<style>
+  .landing-hero {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--color-black, #161514);
+  }
+
+  .landing-hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .landing-hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Top nav: 3 items spread across */
+  .landing-hero-top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px 10px;
+  }
+
+  .nav-link {
+    color: var(--color-white, #f8f4ee);
+    text-decoration: none;
+    font-family: "Montserrat", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 14px;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+    position: relative;
+    transition: opacity 0.2s ease;
+  }
+
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--color-white, #f8f4ee);
+    transition: width 0.3s ease;
+  }
+
+  .nav-link:hover::after {
+    width: 100%;
+  }
+
+  .nav-link:hover {
+    opacity: 0.9;
+  }
+
+  .nav-icon {
+    width: 43px;
+    height: 42px;
+    /* Convert SVG to cream color */
+    filter: brightness(0) invert(97%) sepia(4%) saturate(500%) hue-rotate(340deg);
+  }
+
+  /* Center logo */
+  .landing-hero-logo-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 24px;
+  }
+
+  .landing-hero-logo-container {
+    width: 68%;
+    max-width: 977px;
+    aspect-ratio: 6.89 / 1;
+  }
+
+  .landing-hero-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* Convert SVG to cream color */
+    filter: brightness(0) invert(97%) sepia(4%) saturate(500%) hue-rotate(340deg);
+  }
+
+  /* Bottom nav: centered */
+  .landing-hero-bottom-nav {
+    display: flex;
+    justify-content: center;
+    padding: 16px 24px 26px;
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .landing-hero {
+      height: 100svh;
+    }
+
+    .landing-hero-top-nav {
+      padding: 16px 16px 10px;
+    }
+
+    .landing-hero-logo-wrapper {
+      padding: 0 16px;
+    }
+
+    .landing-hero-logo-container {
+      width: 90%;
+    }
+
+    .landing-hero-bottom-nav {
+      padding: 16px 16px 24px;
+    }
+
+    .nav-icon {
+      width: 36px;
+      height: 35px;
+    }
+
+    .nav-link {
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+
+  // Animate elements on load
+  const topNav = document.querySelector('.landing-hero-top-nav');
+  const logo = document.querySelector('.landing-hero-logo');
+  const bottomNav = document.querySelector('.landing-hero-bottom-nav');
+
+  if (topNav && logo && bottomNav) {
+    // Set initial states
+    gsap.set([topNav, bottomNav], { opacity: 0, y: -20 });
+    gsap.set(logo, { opacity: 0, scale: 0.95 });
+
+    // Animate in sequence
+    const tl = gsap.timeline({ delay: 0.3 });
+
+    tl.to(logo, {
+      opacity: 1,
+      scale: 1,
+      duration: 1,
+      ease: 'power2.out'
+    })
+    .to(topNav, {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      ease: 'power2.out'
+    }, '-=0.5')
+    .to(bottomNav, {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      ease: 'power2.out'
+    }, '-=0.4');
+  }
+</script>
