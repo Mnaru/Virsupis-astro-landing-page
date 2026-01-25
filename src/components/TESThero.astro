@@ -1,0 +1,51 @@
+---
+interface Props {
+  image?: string;
+  mobileImage?: string;
+  alt?: string;
+}
+
+const {
+  image = "/images/Hero%20image.png",
+  mobileImage = "/images/Hero%20image%20mobile.jpeg",
+  alt = "Viršupis - privatus namų kvartalas"
+} = Astro.props;
+---
+
+<section class="test-hero">
+  <picture>
+    <source media="(max-width: 768px)" srcset={mobileImage} />
+    <img
+      src={image}
+      alt={alt}
+      class="test-hero-image"
+      loading="eager"
+      fetchpriority="high"
+    />
+  </picture>
+</section>
+
+<style>
+  .test-hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+  }
+
+  .test-hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  @media (max-width: 768px) {
+    .test-hero {
+      height: 100svh;
+    }
+
+    .test-hero-image {
+      object-position: center bottom;
+    }
+  }
+</style>

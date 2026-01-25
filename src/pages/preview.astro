@@ -2,7 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
 import MobileHeader from "../components/MobileHeader.astro";
-import Hero from "../components/Hero.astro";
+import TESThero from "../components/TESThero.astro";
 import AboutSection from "../components/AboutSection.astro";
 import FullBleedImage from "../components/FullBleedImage.astro";
 import TextSection from "../components/TextSection.astro";
@@ -12,22 +12,12 @@ import ImageGallery from "../components/ImageGallery.astro";
 ---
 
 <BaseLayout title="Viršupis — Privatus namų kvartalas Vilniuje">
-  <link slot="head" rel="preload" as="image" href="/images/Hero%20image.png" media="(min-width: 769px)" />
-  <link slot="head" rel="preload" as="image" href="/images/new%20image.png" media="(max-width: 768px)" />
   <Header />
   <MobileHeader />
 
   <main>
-    <Hero
-      image="/images/Hero%20image.png"
-      mobileImage="/images/new%20image.png"
-      alt="Viršupis - privatus namų kvartalas"
-    />
-
-    <!-- Content wrapper - scrolls over fixed hero -->
-    <div class="content-wrapper">
-      <!-- About Section -->
-      <AboutSection />
+    <TESThero />
+    <AboutSection />
 
       <!-- Full Bleed Area Image -->
       <FullBleedImage src="/images/Area image.png" alt="Viršupis area overview" parallax={true} />
@@ -77,25 +67,7 @@ import ImageGallery from "../components/ImageGallery.astro";
         buttonHref="mailto:info@virsupis.com"
       />
 
-      <Footer />
-    </div>
+    <Footer />
   </main>
 </BaseLayout>
 
-<style>
-  .content-wrapper {
-    position: relative;
-    z-index: 2;
-    background-color: var(--color-white, #f8f4ee);
-    margin-top: -1px; /* Overlap to eliminate subpixel gap */
-    padding-top: 1px; /* Compensate for negative margin */
-  }
-
-  @media (max-width: 768px) {
-    .content-wrapper {
-      /* Use backface-visibility to avoid GSAP conflicts */
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-    }
-  }
-</style>
