@@ -81,24 +81,44 @@ const {
   const heroSpacer = document.querySelector('.test-hero-spacer');
 
   if (heroImage && heroSpacer) {
-    gsap.fromTo(
-      heroImage,
-      {
-        scale: 1,
-        opacity: 1,
+    ScrollTrigger.matchMedia({
+      // Desktop (769px and up)
+      "(min-width: 769px)": function() {
+        gsap.fromTo(
+          heroImage,
+          { scale: 1, opacity: 1 },
+          {
+            scale: 0.95,
+            opacity: 0.3,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: heroSpacer,
+              start: '50% top',
+              end: 'bottom top',
+              scrub: 0.5,
+            }
+          }
+        );
       },
-      {
-        scale: 0.95,
-        opacity: 0.3,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: heroSpacer,
-          start: '40% top',
-          end: 'bottom top',
-          scrub: 0.5,
-          markers: true, // DEBUG: Remove after testing
-        }
+
+      // Mobile (768px and below)
+      "(max-width: 768px)": function() {
+        gsap.fromTo(
+          heroImage,
+          { scale: 1, opacity: 1 },
+          {
+            scale: 0.95,
+            opacity: 0.3,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: heroSpacer,
+              start: '1% top',
+              end: 'bottom top',
+              scrub: 0.5,
+            }
+          }
+        );
       }
-    );
+    });
   }
 </script>
