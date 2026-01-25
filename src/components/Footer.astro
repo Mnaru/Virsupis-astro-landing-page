@@ -58,12 +58,25 @@ const currentYear = new Date().getFullYear();
 
 <style>
   .footer {
+    position: relative;
+    z-index: 5;
     background-color: #161514;
     color: var(--color-white, #f8f4ee);
     padding: 80px 24px 24px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+  }
+
+  /* Fix sub-pixel gap at bottom */
+  .footer::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background-color: #161514;
   }
 
   /* Top Row */
@@ -259,77 +272,43 @@ const currentYear = new Date().getFullYear();
 
   gsap.registerPlugin(ScrollTrigger);
 
-  const footer = document.querySelector('.footer');
+  const footer = document.querySelector(".footer");
 
-  // Description text + CTA button: Simple fade in
-  const footerDescription = document.querySelector('.footer-description');
-  const footerCta = document.querySelector('.footer-cta');
-  if (footer && (footerDescription || footerCta)) {
-    const elements = [footerDescription, footerCta].filter(Boolean);
-    const rect = footer.getBoundingClientRect();
-    const alreadyVisible = rect.top < window.innerHeight * 0.85;
+  if (footer) {
+    // Calculate overlap - never more than viewport height
+    const getOverlap = () => Math.min(window.innerHeight, (footer as HTMLElement).offsetHeight);
 
-    if (alreadyVisible) {
-      gsap.set(elements, { opacity: 1 });
-    } else {
-      gsap.fromTo(elements,
-        { opacity: 0 },
-        {
-          opacity: 1,
-          duration: 0.6,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: footer,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-          }
-        }
-      );
-    }
-  }
+    // Apply negative margin to pull footer up behind content
+    const adjustFooterOverlap = () => {
+      (footer as HTMLElement).style.marginTop = -getOverlap() + "px";
+    };
 
-  // Nav columns: Headers and links fade in one by one
-  const navColumns = document.querySelectorAll('.nav-column');
-  if (footer && navColumns.length > 0) {
-    // Collect all items from both columns in order
-    const allNavItems: Element[] = [];
-    navColumns.forEach((column) => {
-      const header = column.querySelector('.nav-header');
-      const links = column.querySelectorAll('.nav-link');
-      if (header) allNavItems.push(header);
-      links.forEach(link => allNavItems.push(link));
+    adjustFooterOverlap();
+
+    // Re-adjust on resize for responsiveness
+    window.addEventListener("resize", () => {
+      adjustFooterOverlap();
+      ScrollTrigger.refresh();
     });
 
-    const rect = footer.getBoundingClientRect();
-    const alreadyVisible = rect.top < window.innerHeight * 0.8;
+    // Pin the footer when revealed
+    ScrollTrigger.create({
+      trigger: footer,
+      start: () => "top " + (window.innerHeight - getOverlap()),
+      end: () => "+=" + getOverlap(),
+      pin: true,
+    });
 
-    if (alreadyVisible) {
-      gsap.set(allNavItems, { opacity: 1, y: 0 });
-    } else {
-      gsap.fromTo(allNavItems,
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.4,
-          ease: 'power2.out',
-          stagger: 0.08,
-          scrollTrigger: {
-            trigger: footer,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-          }
-        }
-      );
-    }
+    // Subtle scale/opacity animation as footer reveals
+    gsap.from(footer, {
+      scale: 0.98,
+      opacity: 0.9,
+      scrollTrigger: {
+        trigger: footer,
+        start: "top bottom",
+        end: "top 50%",
+        scrub: true,
+      }
+    });
   }
-
-  // Large logo: Always visible (removed animation due to visibility issues)
-  const footerLogoWrapper = document.querySelector('.footer-logo-wrapper');
-  if (footerLogoWrapper) {
-    gsap.set(footerLogoWrapper, { opacity: 1 });
-  }
-
-  // Disclaimer + copyright: No animation - always visible
-  // (Removed animation as it caused visibility issues at bottom of page)
 </script>
