@@ -68,17 +68,6 @@ const currentYear = new Date().getFullYear();
     gap: 20px;
   }
 
-  /* Fix sub-pixel gap at bottom */
-  .footer::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    right: 0;
-    height: 5px;
-    background-color: #161514;
-  }
-
   /* Top Row */
   .footer-top {
     display: flex;
@@ -267,56 +256,6 @@ const currentYear = new Date().getFullYear();
 </style>
 
 <script>
-  import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-  gsap.registerPlugin(ScrollTrigger);
-
-  const footer = document.querySelector(".footer");
-
-  if (footer) {
-    // Calculate overlap - never more than viewport height
-    const getOverlap = () => Math.min(window.innerHeight, (footer as HTMLElement).offsetHeight);
-
-    // Apply negative margin to pull footer up behind content
-    const adjustFooterOverlap = () => {
-      (footer as HTMLElement).style.marginTop = -getOverlap() + "px";
-    };
-
-    adjustFooterOverlap();
-
-    // Re-adjust on resize for responsiveness
-    window.addEventListener("resize", () => {
-      adjustFooterOverlap();
-      ScrollTrigger.refresh();
-    });
-
-    // Pin the footer when revealed
-    ScrollTrigger.create({
-      trigger: footer,
-      start: () => "top " + (window.innerHeight - getOverlap()),
-      end: () => "+=" + getOverlap(),
-      pin: true,
-      onEnter: () => {
-        // Raise z-index above content when footer starts revealing
-        (footer as HTMLElement).style.zIndex = "15";
-      },
-      onLeaveBack: () => {
-        // Lower z-index back when scrolling back up
-        (footer as HTMLElement).style.zIndex = "5";
-      },
-    });
-
-    // Subtle scale/opacity animation as footer reveals
-    gsap.from(footer, {
-      scale: 0.98,
-      opacity: 0.9,
-      scrollTrigger: {
-        trigger: footer,
-        start: "top bottom",
-        end: "top 50%",
-        scrub: true,
-      }
-    });
-  }
+  // Footer is displayed normally - no reveal effect for now
+  // The content-wrapper scrolls over the TESThero, and footer follows at the end
 </script>
