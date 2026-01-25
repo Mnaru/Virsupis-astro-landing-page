@@ -238,12 +238,6 @@ const { image1, image1Alt, image2, image2Alt, parallax = true, reversed = false 
       align-self: flex-end;
     }
 
-    /* Disable parallax on tablet */
-    .image-left.parallax-enabled img,
-    .image-right.parallax-enabled img {
-      height: 100%;
-      top: 0;
-    }
   }
 
   /* Mobile - stacked layout */
@@ -297,12 +291,6 @@ const { image1, image1Alt, image2, image2Alt, parallax = true, reversed = false 
       aspect-ratio: 635 / 800;
     }
 
-    /* Disable parallax on mobile */
-    .image-left.parallax-enabled img,
-    .image-right.parallax-enabled img {
-      height: 100%;
-      top: 0;
-    }
   }
 </style>
 
@@ -317,12 +305,7 @@ const { image1, image1Alt, image2, image2Alt, parallax = true, reversed = false 
     ignoreMobileResize: true,
   });
 
-  // Only run parallax on desktop (1024px+)
-  const mediaQuery = window.matchMedia("(min-width: 1024px)");
-
   function initParallax() {
-    if (!mediaQuery.matches) return;
-
     const containers = document.querySelectorAll(".image-gallery .parallax-enabled");
 
     containers.forEach((container) => {
