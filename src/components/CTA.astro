@@ -1,23 +1,97 @@
 ---
 interface Props {
-  title: string;
-  description?: string;
-  buttonText: string;
-  buttonHref: string;
+  text?: string;
+  backgroundImage?: string;
 }
 
-const { title, description, buttonText, buttonHref } = Astro.props;
+const {
+  text = "STATYBOS DARBAI PRADEDAMI 2026 BALANDĮ.",
+  backgroundImage = "/images/CTA bg.png"
+} = Astro.props;
 ---
 
-<section class="py-24 md:py-32 bg-[var(--color-border)]/20">
-  <div class="max-w-3xl mx-auto px-6 text-center">
-    <h2 class="text-3xl md:text-4xl font-medium mb-6">{title}</h2>
-    {description && <p class="text-lg text-white/70 mb-10">{description}</p>}
-    <a
-      href={buttonHref}
-      class="inline-block px-8 py-4 bg-white text-black font-medium uppercase tracking-widest text-sm hover:bg-[var(--color-accent)] hover:text-white transition-colors"
-    >
-      {buttonText}
-    </a>
+<section class="cta-section">
+  <div class="cta-background">
+    <div class="cta-bg-color"></div>
+    <div class="cta-bg-image">
+      <img src={backgroundImage} alt="" loading="lazy" />
+    </div>
+  </div>
+  <div class="cta-content">
+    <p class="cta-text">{text}</p>
   </div>
 </section>
+
+<style>
+  .cta-section {
+    position: relative;
+    width: 100%;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .cta-background {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .cta-bg-color {
+    position: absolute;
+    inset: 0;
+    background-color: #e7e2da;
+  }
+
+  .cta-bg-image {
+    position: absolute;
+    inset: 0;
+    opacity: 1;
+    overflow: hidden;
+  }
+
+  .cta-bg-image img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    object-fit: cover;
+  }
+
+  .cta-content {
+    position: relative;
+    z-index: 1;
+    max-width: 488px;
+    padding: 0 24px;
+    text-align: center;
+  }
+
+  .cta-text {
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+    font-size: 21px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 25px;
+    letter-spacing: 4.2px;
+    color: var(--color-black, #161514);
+    margin: 0;
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .cta-section {
+      min-height: 400px;
+    }
+
+    .cta-text {
+      font-size: 18px;
+      line-height: 22px;
+    }
+  }
+</style>
