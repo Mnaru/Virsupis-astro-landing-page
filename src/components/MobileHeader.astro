@@ -31,6 +31,11 @@
     padding-right: 16px;
     padding-bottom: 24px;
     padding-left: 16px;
+    /* iOS fix: Force GPU compositing layer for stable fixed positioning */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
   }
 
   .mobile-logo-wrapper {
