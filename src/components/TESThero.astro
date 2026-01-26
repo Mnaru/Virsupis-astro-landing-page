@@ -47,7 +47,7 @@ const {
   }
 
   .test-hero-spacer {
-    height: 150vh;
+    height: 120vh;
     position: relative;
     z-index: 1;
   }
@@ -62,7 +62,7 @@ const {
     }
 
     .test-hero-spacer {
-      height: 150svh;
+      height: 120svh;
     }
   }
 </style>
@@ -89,6 +89,7 @@ const {
     ScrollTrigger.matchMedia({
       // Desktop (769px and up)
       "(min-width: 769px)": function() {
+        // Animation (zoom/fade)
         gsap.fromTo(
           heroImage,
           { scale: 1.05, opacity: 1 },
@@ -98,22 +99,25 @@ const {
             ease: 'none',
             scrollTrigger: {
               trigger: heroSpacer,
-              start: '50% top',
-              end: 'bottom top',
+              start: '10% top',
+              end: '60% top',
               scrub: 0.5,
-              onLeave: () => {
-                gsap.set(testHero, { visibility: 'hidden' });
-              },
-              onEnterBack: () => {
-                gsap.set(testHero, { visibility: 'visible' });
-              },
             }
           }
         );
+
+        // Visibility toggle (separate - hide only when fully scrolled past)
+        ScrollTrigger.create({
+          trigger: heroSpacer,
+          start: 'bottom top',
+          onEnter: () => gsap.set(testHero, { visibility: 'hidden' }),
+          onLeaveBack: () => gsap.set(testHero, { visibility: 'visible' }),
+        });
       },
 
       // Mobile (768px and below)
       "(max-width: 768px)": function() {
+        // Animation (zoom/fade)
         gsap.fromTo(
           heroImage,
           { scale: 1.05, opacity: 1 },
@@ -123,18 +127,20 @@ const {
             ease: 'none',
             scrollTrigger: {
               trigger: heroSpacer,
-              start: '1% top',
-              end: 'bottom top',
+              start: '10% top',
+              end: '60% top',
               scrub: 0.5,
-              onLeave: () => {
-                gsap.set(testHero, { visibility: 'hidden' });
-              },
-              onEnterBack: () => {
-                gsap.set(testHero, { visibility: 'visible' });
-              },
             }
           }
         );
+
+        // Visibility toggle (separate - hide only when fully scrolled past)
+        ScrollTrigger.create({
+          trigger: heroSpacer,
+          start: 'bottom top',
+          onEnter: () => gsap.set(testHero, { visibility: 'hidden' }),
+          onLeaveBack: () => gsap.set(testHero, { visibility: 'visible' }),
+        });
       }
     });
   }

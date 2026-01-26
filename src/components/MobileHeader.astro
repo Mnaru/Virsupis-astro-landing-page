@@ -29,7 +29,7 @@
     align-items: flex-start;
     padding-top: calc(24px + env(safe-area-inset-top, 0px));
     padding-right: 16px;
-    padding-bottom: 24px;
+    padding-bottom: 16px;
     padding-left: 16px;
     /* iOS fix: Force GPU compositing layer for stable fixed positioning */
     -webkit-transform: translate3d(0, 0, 0);
@@ -116,7 +116,7 @@
         const logoWidth = getExpandedLogoWidth();
         const logoHeight = logoWidth / logoAspectRatio;
         const safeArea = getSafeAreaTop();
-        return 24 + safeArea + logoHeight + 24;
+        return 24 + safeArea + logoHeight + 16;
       };
 
       // Calculate collapsed padding to center the logo vertically
@@ -133,7 +133,7 @@
         gsap.set(header, {
           height: getExpandedHeight(),
           paddingTop: 24 + getSafeAreaTop(),
-          paddingBottom: 24
+          paddingBottom: 16
         });
       };
 
@@ -170,7 +170,7 @@
           {
             height: getExpandedHeight(),
             paddingTop: 24 + getSafeAreaTop(),
-            paddingBottom: 24,
+            paddingBottom: 16,
             paddingLeft: 16,
             paddingRight: 16
           },
