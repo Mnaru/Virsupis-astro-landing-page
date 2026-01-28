@@ -113,6 +113,9 @@
     flex-direction: column;
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
+    /* Hide when closed to prevent interference with header fixed positioning */
+    visibility: hidden;
+    pointer-events: none;
   }
 
   /* Menu header matches collapsed mobile header exactly */
@@ -374,6 +377,10 @@
     document.body.style.overflow = 'hidden';
     menuOverlay.setAttribute('aria-hidden', 'false');
 
+    // Show overlay before animating
+    menuOverlay.style.visibility = 'visible';
+    menuOverlay.style.pointerEvents = 'auto';
+
     // Animate overlay expansion
     gsap.to(menuOverlay, {
       height: '100dvh',
@@ -413,6 +420,9 @@
       onComplete: () => {
         document.body.style.overflow = '';
         menuOverlay.setAttribute('aria-hidden', 'true');
+        // Hide overlay to prevent interference with header fixed positioning
+        menuOverlay.style.visibility = 'hidden';
+        menuOverlay.style.pointerEvents = 'none';
         // Reset menu items for next open
         gsap.set(menuItems, { opacity: 0, y: 20 });
       }
