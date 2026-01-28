@@ -8,13 +8,6 @@ const {
   heading = "Apie projektą",
   description = `Pastatyti namą ir sukurti namus — dvi skirtingos ambicijos. „Kai pradedi namus vertinti pagal tualetų skaičių — jau lauk bėdos", sako Mindaugas Plisas, Viršupio projekto autorius. Anot jo, tobuli namai nėra tie, kurie uždaro gyventojus išpuoselėtoje pilaitėje, atriboję nuo kaimynų ir supančio pasaulio. Namai turi kurti ryšį, o ne izoliuoti. Apie tai ir kalbamės.`
 } = Astro.props;
-
-const features = [
-  { label: "LOCATION", value: "Antakalnis, Vilnius" },
-  { label: "SCOPE", value: "62 residences" },
-  { label: "AREA", value: "79–162 m²" },
-  { label: "AVAILABLE", value: "2026, 2nd Quarter" },
-];
 ---
 
 <section id="apie" class="about-section">
@@ -23,14 +16,6 @@ const features = [
     <p class="about-description">{description}</p>
   </div>
 
-  <div class="features-row">
-    {features.map((feature) => (
-      <div class="feature">
-        <span class="feature-label">{feature.label}</span>
-        <span class="feature-value">{feature.value}</span>
-      </div>
-    ))}
-  </div>
 </section>
 
 <style>
@@ -58,7 +43,7 @@ const features = [
   }
 
   .about-heading {
-    font-family: "Montserrat", sans-serif;
+    font-family: "General Sans", sans-serif;
     font-weight: 700;
     font-size: 21px;
     line-height: 1;
@@ -69,46 +54,12 @@ const features = [
   }
 
   .about-description {
-    font-family: var(--font-body, "Roboto", sans-serif);
+    font-family: var(--font-body, "General Sans", sans-serif);
     font-weight: 400;
     font-size: 16px;
     line-height: normal;
     color: var(--color-black, #161514);
     margin: 0;
-  }
-
-  .features-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0;
-  }
-
-  .feature {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 24px;
-    width: 212px;
-    text-align: center;
-  }
-
-  .feature-label {
-    font-family: "Montserrat", sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 1;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--color-black, #161514);
-  }
-
-  .feature-value {
-    font-family: var(--font-body, "Roboto", sans-serif);
-    font-weight: 400;
-    font-size: 16px;
-    line-height: normal;
-    color: var(--color-black, #161514);
   }
 
   /* Mobile responsive */
@@ -124,16 +75,6 @@ const features = [
 
     .about-heading {
       font-size: 18px;
-    }
-
-    .features-row {
-      flex-direction: column;
-      gap: 40px;
-    }
-
-    .feature {
-      width: 100%;
-      gap: 16px;
     }
   }
 </style>
@@ -174,21 +115,4 @@ const features = [
     });
   }
 
-  // Staggered fade up for feature items
-  const featuresRow = document.querySelector('.features-row');
-  const featureItems = document.querySelectorAll('.feature');
-  if (featuresRow && featureItems.length > 0) {
-    gsap.from(featureItems, {
-      opacity: 0,
-      y: 30,
-      duration: 0.5,
-      ease: 'power2.out',
-      stagger: 0.15,
-      scrollTrigger: {
-        trigger: featuresRow,
-        start: 'top 80%',
-        toggleActions: 'play none none none',
-      }
-    });
-  }
 </script>

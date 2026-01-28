@@ -1,41 +1,44 @@
 ---
 import Logo from "./Logo.astro";
 
-const email = "info@virsupis.lt";
-const phone = "+370 600 00000";
+const email = "mindaugas@virsupis.com";
 const instagramUrl = "https://www.instagram.com/virsupis_vilnius/";
+const mapsUrl = "https://maps.app.goo.gl/VrLXHLc5Ni44R8rA6";
 const currentYear = new Date().getFullYear();
 ---
 
 <footer id="kontaktai" class="footer">
-  <!-- Top Row: Description + CTA | Navigation Columns -->
+  <!-- Top Row: Description | Navigation Columns -->
   <div class="footer-top">
-    <!-- Left: Description + CTA -->
+    <!-- Left: Description -->
     <div class="footer-left">
       <p class="footer-description">
         Viršupis — privatus 33 namų kvartalas Antakalnyje, Vilniuje. Modernus gyvenimas gamtos apsuptyje, vos 15 minučių nuo miesto centro.
       </p>
-      <a href={`mailto:${email}`} class="footer-cta">
-        SUSISIEKTI
-      </a>
     </div>
 
     <!-- Right: Navigation Columns -->
     <div class="footer-nav">
-      <!-- Connect Column -->
       <div class="nav-column">
-        <span class="nav-header">Connect</span>
-        <a href={`tel:${phone.replace(/\s/g, "")}`} class="nav-link">CALL</a>
-        <a href={`mailto:${email}`} class="nav-link">EMAIL</a>
-        <a href={instagramUrl} target="_blank" rel="noopener noreferrer" class="nav-link">INSTAGRAM</a>
+        <a href="#apie" class="nav-link">
+          <span class="nav-link-text">APIE</span>
+          <span class="nav-link-underline"></span>
+        </a>
+        <a href={mapsUrl} target="_blank" rel="noopener noreferrer" class="nav-link">
+          <span class="nav-link-text">ADRESAS</span>
+          <span class="nav-link-underline"></span>
+        </a>
       </div>
 
-      <!-- Navigate Column -->
       <div class="nav-column">
-        <span class="nav-header">Navigate</span>
-        <a href="#vieta" class="nav-link">LOCATION</a>
-        <a href="#namai" class="nav-link">HOMES</a>
-        <a href="#teritorija" class="nav-link">AREA</a>
+        <a href={instagramUrl} target="_blank" rel="noopener noreferrer" class="nav-link">
+          <span class="nav-link-text">INSTAGRAM</span>
+          <span class="nav-link-underline"></span>
+        </a>
+        <a href={`mailto:${email}`} class="nav-link">
+          <span class="nav-link-text">SUSISIEKTI</span>
+          <span class="nav-link-underline"></span>
+        </a>
       </div>
     </div>
   </div>
@@ -84,36 +87,14 @@ const currentYear = new Date().getFullYear();
   }
 
   .footer-description {
-    font-family: var(--font-body, "Roboto", sans-serif);
+    font-family: var(--font-body, "General Sans", sans-serif);
     font-weight: 400;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 20px;
     color: var(--color-white, #f8f4ee);
     margin: 0;
     text-align: left;
     padding-right: 42px;
-  }
-
-  .footer-cta {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 214px;
-    height: 48px;
-    border: 1px solid var(--color-white, #f8f4ee);
-    border-radius: 10px;
-    font-family: var(--font-body, "Roboto", sans-serif);
-    font-weight: 600;
-    font-size: 14px;
-    letter-spacing: 0.2em;
-    color: var(--color-white, #f8f4ee);
-    text-decoration: none;
-    transition: background-color 0.2s ease, color 0.2s ease;
-  }
-
-  .footer-cta:hover {
-    background-color: var(--color-white, #f8f4ee);
-    color: #161514;
   }
 
   /* Navigation */
@@ -124,35 +105,44 @@ const currentYear = new Date().getFullYear();
   .nav-column {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    align-items: flex-start;
+    gap: 16px;
     padding-left: 16px;
     border-left: 0.5px solid var(--color-white, #f8f4ee);
     width: 212px;
   }
 
-  .nav-header {
-    font-family: var(--font-body, "Roboto", sans-serif);
-    font-weight: 400;
-    font-size: 16px;
-    font-style: normal;
-    color: var(--color-white, #f8f4ee);
-    text-align: left;
-  }
-
   .nav-link {
-    font-family: "Montserrat", sans-serif;
-    font-weight: 600;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-family: "General Sans", sans-serif;
+    font-weight: 500;
     font-size: 14px;
     line-height: 14px;
     letter-spacing: 0.2em;
     color: var(--color-white, #f8f4ee);
     text-decoration: none;
     text-align: left;
-    transition: opacity 0.2s ease;
   }
 
-  .nav-link:hover {
-    opacity: 0.7;
+  .nav-link-text {
+    position: relative;
+  }
+
+  .nav-link-underline {
+    display: block;
+    width: 100%;
+    height: 0.5px;
+    background-color: var(--color-white, #f8f4ee);
+    margin-top: 4px;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.3s ease-out;
+  }
+
+  .nav-link:hover .nav-link-underline {
+    transform: scaleX(1);
   }
 
   /* Logo */
@@ -181,10 +171,10 @@ const currentYear = new Date().getFullYear();
 
   .footer-disclaimer,
   .footer-copyright {
-    font-family: var(--font-body, "Roboto", sans-serif);
+    font-family: var(--font-body, "General Sans", sans-serif);
     font-weight: 400;
-    font-size: 14px;
-    line-height: 14px;
+    font-size: 12px;
+    line-height: 12px;
     color: var(--color-white, #f8f4ee);
     margin: 0;
   }
@@ -215,15 +205,6 @@ const currentYear = new Date().getFullYear();
     .footer-top {
       flex-direction: column;
       gap: 40px;
-    }
-
-    .footer-left {
-      gap: 24px;
-    }
-
-    .footer-cta {
-      width: 100%;
-      max-width: 280px;
     }
 
     .footer-nav {

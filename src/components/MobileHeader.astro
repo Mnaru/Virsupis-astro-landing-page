@@ -91,111 +91,164 @@
     ignoreMobileResize: true,
   });
 
-  ScrollTrigger.matchMedia({
-    "(max-width: 767px)": function () {
-      const header = document.querySelector(".mobile-header") as HTMLElement;
-      const logoWrapper = document.querySelector(".mobile-logo-wrapper") as HTMLElement;
-      const menuBtn = document.querySelector(".mobile-menu-btn") as HTMLElement;
-      const spacer = document.querySelector(".mobile-header-spacer") as HTMLElement;
+  // Initialize mobile header after layout is stable
+  const initMobileHeader = () => {
+    ScrollTrigger.matchMedia({
+      "(max-width: 767px)": function () {
+        const header = document.querySelector(".mobile-header") as HTMLElement;
+        const logoWrapper = document.querySelector(".mobile-logo-wrapper") as HTMLElement;
+        const menuBtn = document.querySelector(".mobile-menu-btn") as HTMLElement;
+        const spacer = document.querySelector(".mobile-header-spacer") as HTMLElement;
+        const aboutSection = document.getElementById("apie");
 
-      if (!header || !logoWrapper || !menuBtn || !spacer) return;
+        if (!header || !logoWrapper || !menuBtn || !spacer) {
+          console.warn("Mobile header elements not found");
+          return function () {};
+        }
 
-      const logoAspectRatio = 6.89;
-      const collapsedHeight = 63;
-      const collapsedLogoWidth = 200;
+        if (!aboutSection) {
+          console.warn("About section #apie not found for mobile header animation");
+          return function () {};
+        }
 
-      // Get safe area inset from CSS
-      const getSafeAreaTop = () => {
-        const value = getComputedStyle(document.documentElement).getPropertyValue('--sat');
-        return value ? parseInt(value) : 0;
-      };
+        const logoAspectRatio = 6.89;
+        const collapsedHeight = 63;
+        const collapsedLogoWidth = 200;
 
-      const getExpandedLogoWidth = () => window.innerWidth - 32;
+        // Get safe area inset from CSS
+        const getSafeAreaTop = () => {
+          const value = getComputedStyle(document.documentElement).getPropertyValue('--sat');
+          return value ? parseInt(value) : 0;
+        };
 
-      const getExpandedHeight = () => {
-        const logoWidth = getExpandedLogoWidth();
-        const logoHeight = logoWidth / logoAspectRatio;
-        const safeArea = getSafeAreaTop();
-        return 24 + safeArea + logoHeight + 16;
-      };
+        const getExpandedLogoWidth = () => window.innerWidth - 32;
 
-      // Calculate collapsed padding to center the logo vertically
-      const getCollapsedPadding = () => {
-        const collapsedLogoHeight = collapsedLogoWidth / logoAspectRatio;
-        const verticalPadding = (collapsedHeight - collapsedLogoHeight) / 2;
-        return verticalPadding;
-      };
+        const getExpandedHeight = () => {
+          const logoWidth = getExpandedLogoWidth();
+          const logoHeight = logoWidth / logoAspectRatio;
+          const safeArea = getSafeAreaTop();
+          return 24 + safeArea + logoHeight + 16;
+        };
 
-      const setInitialState = () => {
-        gsap.set(logoWrapper, { width: getExpandedLogoWidth() });
-        gsap.set(menuBtn, { autoAlpha: 0 });
-        gsap.set(spacer, { height: getExpandedHeight() });
-        gsap.set(header, {
-          height: getExpandedHeight(),
-          paddingTop: 24 + getSafeAreaTop(),
-          paddingBottom: 16
-        });
-      };
+        // Calculate collapsed padding to center the logo vertically
+        const getCollapsedPadding = () => {
+          const collapsedLogoHeight = collapsedLogoWidth / logoAspectRatio;
+          const verticalPadding = (collapsedHeight - collapsedLogoHeight) / 2;
+          return verticalPadding;
+        };
 
-      setInitialState();
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: document.body,
-          start: "50px top",
-          end: "150px top",
-          scrub: true,
-          invalidateOnRefresh: true,
-          onRefresh: () => {
-            if (window.scrollY < 50) {
-              setInitialState();
-            }
-          },
-        },
-      });
-
-      tl.fromTo(
-        logoWrapper,
-        { width: getExpandedLogoWidth() },
-        { width: collapsedLogoWidth, ease: "none" },
-        0
-      )
-        .to(
-          menuBtn,
-          { autoAlpha: 1, ease: "none" },
-          0
-        )
-        .fromTo(
-          header,
-          {
+        const setInitialState = () => {
+          gsap.set(logoWrapper, { width: getExpandedLogoWidth() });
+          gsap.set(menuBtn, { autoAlpha: 0 });
+          gsap.set(spacer, { height: getExpandedHeight() });
+          gsap.set(header, {
             height: getExpandedHeight(),
             paddingTop: 24 + getSafeAreaTop(),
-            paddingBottom: 16,
-            paddingLeft: 16,
-            paddingRight: 16
-          },
-          {
+            paddingBottom: 16
+          });
+        };
+
+        setInitialState();
+
+        // Track animation state
+        let isCollapsed = false;
+
+        // Collapse header function (spacer stays fixed to prevent layout shift)
+        const collapseHeader = () => {
+          gsap.to(logoWrapper, {
+            width: collapsedLogoWidth,
+            duration: 0.4,
+            ease: "power2.out"
+          });
+          gsap.to(menuBtn, {
+            autoAlpha: 1,
+            duration: 0.3,
+            ease: "power2.out"
+          });
+          gsap.to(header, {
             height: collapsedHeight + getSafeAreaTop(),
             paddingTop: getCollapsedPadding() + getSafeAreaTop(),
             paddingBottom: getCollapsedPadding(),
-            paddingLeft: 16,
-            paddingRight: 16,
-            ease: "none"
+            duration: 0.4,
+            ease: "power2.out"
+          });
+        };
+
+        // Expand header function (spacer stays fixed to prevent layout shift)
+        const expandHeader = () => {
+          gsap.to(logoWrapper, {
+            width: getExpandedLogoWidth(),
+            duration: 0.4,
+            ease: "power2.out"
+          });
+          gsap.to(menuBtn, {
+            autoAlpha: 0,
+            duration: 0.3,
+            ease: "power2.out"
+          });
+          gsap.to(header, {
+            height: getExpandedHeight(),
+            paddingTop: 24 + getSafeAreaTop(),
+            paddingBottom: 16,
+            duration: 0.4,
+            ease: "power2.out"
+          });
+        };
+
+        // Create ScrollTrigger for state change
+        // Triggers when top of #apie reaches 8% from top of viewport
+        const trigger = ScrollTrigger.create({
+          trigger: aboutSection,
+          start: "top 8%",
+          markers: true, // TEMPORARY - remove after debugging
+          onEnter: () => {
+            if (!isCollapsed) {
+              isCollapsed = true;
+              collapseHeader();
+            }
           },
-          0
-        )
-        .fromTo(
-          spacer,
-          { height: getExpandedHeight() },
-          { height: collapsedHeight + getSafeAreaTop(), ease: "none" },
-          0
-        );
+          onLeaveBack: () => {
+            if (isCollapsed) {
+              isCollapsed = false;
+              expandHeader();
+            }
+          },
+          invalidateOnRefresh: true
+        });
 
-      ScrollTrigger.refresh();
+        // Refresh to ensure accurate positions
+        ScrollTrigger.refresh();
 
-      return function () {};
-    },
-  });
+        // Check if already scrolled past trigger on page load (after refresh)
+        requestAnimationFrame(() => {
+          const rect = aboutSection.getBoundingClientRect();
+          if (rect.top < window.innerHeight * 0.08) {
+            isCollapsed = true;
+            gsap.set(logoWrapper, { width: collapsedLogoWidth });
+            gsap.set(menuBtn, { autoAlpha: 1 });
+            gsap.set(header, {
+              height: collapsedHeight + getSafeAreaTop(),
+              paddingTop: getCollapsedPadding() + getSafeAreaTop(),
+              paddingBottom: getCollapsedPadding()
+            });
+          }
+        });
+
+        return function () {
+          trigger.kill();
+        };
+      },
+    });
+  };
+
+  // Wait for load + 2 animation frames for layout stability
+  if (document.readyState === 'complete') {
+    requestAnimationFrame(() => requestAnimationFrame(initMobileHeader));
+  } else {
+    window.addEventListener('load', () => {
+      requestAnimationFrame(() => requestAnimationFrame(initMobileHeader));
+    });
+  }
 
   let resizeTimeout: ReturnType<typeof setTimeout>;
   window.addEventListener("resize", () => {

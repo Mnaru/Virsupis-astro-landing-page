@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-heading: "Montserrat", system-ui, sans-serif;
-  --font-body: "Roboto", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-heading: "General Sans", system-ui, sans-serif;
+  --font-body: "General Sans", system-ui, sans-serif;
 
   --color-black: #161514;
   --color-white: #f8f4ee;

@@ -48,7 +48,7 @@ const {
   }
 
   .test-hero-spacer {
-    height: 120vh;
+    height: 100vh;
     position: relative;
     z-index: 1;
   }
@@ -65,7 +65,7 @@ const {
 
     .test-hero-spacer {
       /* Use vh instead of svh to prevent scroll position recalculation at footer */
-      height: 120vh;
+      height: 100vh;
     }
   }
 </style>
@@ -78,8 +78,6 @@ const {
 
   ScrollTrigger.config({
     ignoreMobileResize: true,
-    // Remove resize from auto-refresh to prevent scroll jumps on mobile toolbar show/hide
-    autoRefreshEvents: "visibilitychange,DOMContentLoaded,load",
   });
 
   const heroImage = document.querySelector('.test-hero-image');

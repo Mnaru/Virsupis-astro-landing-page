@@ -8,12 +8,12 @@ import NavButton from "./NavButton.astro";
     <!-- Menu items positioned absolutely - they never move (hidden on mobile) -->
     <nav class="nav-left" aria-label="Pagrindinė navigacija">
       <NavButton href="#apie" label="Apie" />
-      <NavButton href="#namai" label="Namai" />
+      <NavButton href="https://maps.app.goo.gl/VrLXHLc5Ni44R8rA6" label="Adresas" external={true} />
     </nav>
 
     <nav class="nav-right">
-      <NavButton href="#vieta" label="Vieta" />
-      <NavButton href="#kontaktai" label="Kontaktai" />
+      <NavButton href="https://www.instagram.com/virsupis_vilnius/" label="Instagram" external={true} />
+      <NavButton href="mailto:mindaugas@virsupis.com" label="Susisiekti" />
     </nav>
 
     <!-- Logo - CSS handles responsive sizing, GSAP animates collapse -->
@@ -67,15 +67,18 @@ import NavButton from "./NavButton.astro";
     right: 24px;
   }
 
-  /* Logo - CSS handles responsive sizing */
+  /* Logo - absolutely positioned for precise control */
   .header-logo {
     display: block;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     /* Expanded: full width minus padding, capped at 1392px (logo native width) */
     width: calc(100vw - 48px);
     max-width: 1392px;
-    margin-top: 37px; /* Space below nav items */
+    top: 53px; /* 16px padding + 37px margin */
     pointer-events: auto;
-    /* Width will be animated by GSAP */
+    /* Width and position will be animated by GSAP */
   }
 
   .logo-img {
@@ -131,19 +134,21 @@ import NavButton from "./NavButton.astro";
     const getCollapsedHeight = () => 63;
     const getCollapsedSpacerHeight = () => 79;
 
-    const getCollapsedMarginTop = () => {
+    // Calculate collapsed top position to vertically center logo
+    const getCollapsedTop = () => {
       const collapsedLogoWidth = getCollapsedLogoWidth();
       const collapsedLogoHeight = collapsedLogoWidth / logoAspectRatio;
       const collapsedHeight = getCollapsedHeight();
-      return (collapsedHeight - collapsedLogoHeight) / 2 - 16;
+      return (collapsedHeight - collapsedLogoHeight) / 2;
     };
 
     // Set initial state (expanded)
     const setInitialState = () => {
       gsap.set(logo, {
         width: getExpandedLogoWidth(),
-        marginTop: 37,
-        x: 0,
+        top: 53, // 16px padding + 37px space
+        left: '50%',
+        xPercent: -50,
       });
       gsap.set(headerInner, { height: getExpandedHeight() });
       gsap.set(spacer, { height: getSpacerHeight() });
@@ -152,64 +157,95 @@ import NavButton from "./NavButton.astro";
     // Set initial state
     setInitialState();
 
-    const scrollTriggerDistance = 100;
+    // Track animation state
+    let isCollapsed = false;
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: document.body,
-        start: "top top",
-        end: `+=${scrollTriggerDistance}`,
-        scrub: 0.5,
-        invalidateOnRefresh: true,
-        onRefresh: () => {
-          if (window.scrollY === 0) {
-            setInitialState();
+    // Collapse header function (spacer stays fixed to prevent layout shift)
+    const collapseHeader = () => {
+      gsap.to(logo, {
+        width: getCollapsedLogoWidth(),
+        top: getCollapsedTop(),
+        left: '50%',
+        xPercent: -50,
+        duration: 0.5,
+        ease: "power2.inOut"
+      });
+      gsap.to(headerInner, {
+        height: getCollapsedHeight(),
+        duration: 0.5,
+        ease: "power2.inOut"
+      });
+    };
+
+    // Expand header function (spacer stays fixed to prevent layout shift)
+    const expandHeader = () => {
+      gsap.to(logo, {
+        width: getExpandedLogoWidth(),
+        top: 53,
+        left: '50%',
+        xPercent: -50,
+        duration: 0.5,
+        ease: "power2.inOut"
+      });
+      gsap.to(headerInner, {
+        height: getExpandedHeight(),
+        duration: 0.5,
+        ease: "power2.inOut"
+      });
+    };
+
+    // Initialize ScrollTrigger after layout is stable
+    const initScrollTrigger = () => {
+      const aboutSection = document.getElementById("apie");
+
+      if (!aboutSection) {
+        console.warn("About section #apie not found for header animation");
+        return;
+      }
+
+      // Create ScrollTrigger for state change
+      // Triggers when top of #apie reaches 8% from top of viewport
+      ScrollTrigger.create({
+        trigger: aboutSection,
+        start: "top 8%",
+        markers: true, // TEMPORARY - remove after debugging
+        onEnter: () => {
+          if (!isCollapsed) {
+            isCollapsed = true;
+            collapseHeader();
           }
         },
-      },
-    });
+        onLeaveBack: () => {
+          if (isCollapsed) {
+            isCollapsed = false;
+            expandHeader();
+          }
+        },
+        invalidateOnRefresh: true
+      });
 
-    // Animate from expanded to collapsed
-    tl.fromTo(
-      logo,
-      {
-        width: () => getExpandedLogoWidth(),
-        marginTop: 37,
-        x: 0,
-      },
-      {
-        width: () => getCollapsedLogoWidth(),
-        marginTop: () => getCollapsedMarginTop(),
-        x: 0,
-        ease: "none",
-      },
-      0
-    )
-      .fromTo(
-        headerInner,
-        {
-          height: () => getExpandedHeight(),
-        },
-        {
-          height: () => getCollapsedHeight(),
-          ease: "none",
-        },
-        0
-      )
-      .fromTo(
-        spacer,
-        {
-          height: () => getSpacerHeight(),
-        },
-        {
-          height: () => getCollapsedSpacerHeight(),
-          ease: "none",
-        },
-        0
-      );
+      // Refresh to ensure accurate positions
+      ScrollTrigger.refresh();
 
-    // Refresh ScrollTrigger after setup to ensure proper initialization on mobile
-    ScrollTrigger.refresh();
+      // Check if already scrolled past trigger on page load (after refresh)
+      requestAnimationFrame(() => {
+        const rect = aboutSection.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.08) {
+          isCollapsed = true;
+          gsap.set(logo, { width: getCollapsedLogoWidth(), top: getCollapsedTop(), left: '50%', xPercent: -50 });
+          gsap.set(headerInner, { height: getCollapsedHeight() });
+        }
+      });
+    };
+
+    // Wait for load + 2 animation frames for layout stability
+    if (document.readyState === 'complete') {
+      requestAnimationFrame(() => requestAnimationFrame(initScrollTrigger));
+    } else {
+      window.addEventListener('load', () => {
+        requestAnimationFrame(() => requestAnimationFrame(initScrollTrigger));
+      });
+    }
 
     // Debounced resize handler
     let resizeTimeout: ReturnType<typeof setTimeout>;
