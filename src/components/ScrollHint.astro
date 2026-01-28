@@ -13,8 +13,8 @@ const { text = "UŽEIK" } = Astro.props;
 <style>
   .scroll-hint {
     display: none;
-    position: fixed;
-    bottom: calc(5vh + 4px); /* 4px above AboutSection */
+    position: absolute;
+    top: -18px; /* 4px gap + 14px line height = positions text 4px above parent */
     left: 50%;
     transform: translateX(-50%);
     z-index: 15;
