@@ -69,8 +69,13 @@ import ImageGallery from "../components/ImageGallery.astro";
       />
 
       <CTA />
-      <Footer />
     </div>
+
+    <!-- Footer spacer OUTSIDE content-wrapper - transparent to reveal fixed footer -->
+    <div class="footer-spacer"></div>
+
+    <!-- Footer fixed at bottom -->
+    <Footer />
   </main>
 </BaseLayout>
 
@@ -83,9 +88,28 @@ import ImageGallery from "../components/ImageGallery.astro";
     overflow: hidden;
   }
 
+  /* Footer spacer - transparent, creates scroll room to reveal footer */
+  .footer-spacer {
+    height: 500px;
+    position: relative;
+    z-index: 5; /* Between footer (0) and content-wrapper (10) */
+    background: transparent;
+    pointer-events: none;
+  }
+
+  @media (max-width: 1023px) {
+    .footer-spacer {
+      height: 550px;
+    }
+  }
+
   @media (max-width: 768px) {
     .content-wrapper {
       margin-top: -200px;
+    }
+
+    .footer-spacer {
+      height: 600px;
     }
   }
 </style>

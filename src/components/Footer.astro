@@ -61,6 +61,13 @@ const currentYear = new Date().getFullYear();
 
 <style>
   .footer {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 0; /* Below hero (z-index: 1) and content-wrapper (z-index: 10) */
     background-color: #161514;
     color: var(--color-white, #f8f4ee);
     padding: 80px 24px calc(24px + env(safe-area-inset-bottom, 0px));
@@ -252,11 +259,14 @@ const currentYear = new Date().getFullYear();
   const footerLogo = document.querySelector('.footer-logo-wrapper');
   const footerBottom = document.querySelector('.footer-bottom');
 
-  if (footer && footerTop && footerLogo && footerBottom) {
+  const footerSpacer = document.querySelector('.footer-spacer');
+
+  if (footer && footerTop && footerLogo && footerBottom && footerSpacer) {
     // Create timeline for subtle staggered fade
+    // Trigger uses footer-spacer since footer is now fixed
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: footer,
+        trigger: footerSpacer,
         start: 'top 90%',
         toggleActions: 'play none none none',
       }
