@@ -264,16 +264,6 @@ import NavButton from "./NavButton.astro";
       });
     }
 
-    // Debounced resize handler
-    let resizeTimeout: ReturnType<typeof setTimeout>;
-    window.addEventListener("resize", () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => ScrollTrigger.refresh(), 100);
-    });
-
-    // Also refresh on orientation change
-    window.addEventListener("orientationchange", () => {
-      setTimeout(() => ScrollTrigger.refresh(), 100);
-    });
+    // Resize/orientationchange handlers are set globally in scrollTriggerInit.ts
   }
 </script>

@@ -87,9 +87,7 @@
 
   gsap.registerPlugin(ScrollTrigger);
 
-  ScrollTrigger.config({
-    ignoreMobileResize: true,
-  });
+  // ScrollTrigger.config() is set globally in scrollTriggerInit.ts
 
   // Initialize mobile header after layout is stable
   const initMobileHeader = () => {
@@ -249,13 +247,5 @@
     });
   }
 
-  let resizeTimeout: ReturnType<typeof setTimeout>;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => ScrollTrigger.refresh(), 100);
-  });
-
-  window.addEventListener("orientationchange", () => {
-    setTimeout(() => ScrollTrigger.refresh(), 100);
-  });
+  // Resize/orientationchange handlers are set globally in scrollTriggerInit.ts
 </script>

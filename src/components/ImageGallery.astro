@@ -347,18 +347,13 @@ const { image1, image1Alt, image2, image2Alt, parallax = true, reversed = false 
   // Initialize on load
   initParallax();
 
-  // Refresh after layout settles (needed after footer reveal changes)
-  requestAnimationFrame(() => {
-    ScrollTrigger.refresh();
-  });
-
-  // Reinitialize parallax on resize (handles desktop/mobile transitions)
-  let resizeTimeout: ReturnType<typeof setTimeout>;
+  // Reinitialize parallax only when width changes (desktop/mobile transitions)
+  // Global scrollTriggerInit.ts handles ScrollTrigger.refresh()
+  let lastWidth = window.innerWidth;
   window.addEventListener("resize", () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
+    if (window.innerWidth !== lastWidth) {
+      lastWidth = window.innerWidth;
       initParallax();
-      ScrollTrigger.refresh();
-    }, 100);
+    }
   });
 </script>

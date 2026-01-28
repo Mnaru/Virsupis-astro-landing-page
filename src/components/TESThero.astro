@@ -52,19 +52,21 @@ const {
 
   @media (max-width: 768px) {
     .test-hero {
-      /* Use vh instead of svh - svh changes when mobile toolbar shows/hides, causing scroll jumps */
-      height: 95vh;
+      /* Use --vh custom property set by JS - stable during toolbar show/hide */
+      height: calc(var(--vh, 1vh) * 95);
     }
 
     .test-hero-bg {
       background-image: var(--mobile-bg);
+      background-size: contain;
       background-position: center bottom;
       transform: scale(1.05); /* Initial state for mobile zoom animation */
     }
 
     .test-hero-spacer {
-      /* Use vh instead of svh to prevent scroll position recalculation at footer */
-      height: 95vh;
+      /* Reduced height creates overlap effect without negative margins */
+      /* Negative margins cause ScrollTrigger position miscalculations */
+      height: calc(var(--vh, 1vh) * 95 - 200px);
     }
   }
 </style>
@@ -75,9 +77,7 @@ const {
 
   gsap.registerPlugin(ScrollTrigger);
 
-  ScrollTrigger.config({
-    ignoreMobileResize: true,
-  });
+  // ScrollTrigger.config() is set globally in scrollTriggerInit.ts
 
   const heroBg = document.querySelector('.test-hero-bg');
   const heroSpacer = document.querySelector('.test-hero-spacer');
