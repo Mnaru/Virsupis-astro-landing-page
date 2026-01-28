@@ -60,7 +60,7 @@ const currentYear = new Date().getFullYear();
   .footer {
     background-color: #161514;
     color: var(--color-white, #f8f4ee);
-    padding: 80px 24px 24px;
+    padding: 80px 24px calc(24px + env(safe-area-inset-bottom, 0px));
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -208,7 +208,7 @@ const currentYear = new Date().getFullYear();
   /* Mobile */
   @media (max-width: 768px) {
     .footer {
-      padding: 60px 16px 24px;
+      padding: 60px 16px calc(24px + env(safe-area-inset-bottom, 0px));
       gap: 40px;
     }
 
