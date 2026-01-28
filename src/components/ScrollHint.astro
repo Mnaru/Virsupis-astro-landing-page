@@ -1,0 +1,66 @@
+---
+interface Props {
+  text?: string;
+}
+
+const { text = "UŽEIK" } = Astro.props;
+---
+
+<div class="scroll-hint">
+  <span class="scroll-hint-text">{text}</span>
+</div>
+
+<style>
+  .scroll-hint {
+    display: none;
+    position: fixed;
+    bottom: calc(5vh + 4px); /* 4px above AboutSection */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 15;
+    pointer-events: none;
+  }
+
+  .scroll-hint-text {
+    font-family: "General Sans", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 14px;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+    color: red;
+  }
+
+  @media (max-width: 767px) {
+    .scroll-hint {
+      display: block;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  ScrollTrigger.config({
+    ignoreMobileResize: true,
+  });
+
+  const scrollHint = document.querySelector('.scroll-hint');
+
+  if (scrollHint && window.innerWidth < 768) {
+    // Fade out when user starts scrolling
+    gsap.to(scrollHint, {
+      opacity: 0,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: document.body,
+        start: 'top top',
+        end: '+=100', // Fade out over 100px of scroll
+        scrub: true,
+      }
+    });
+  }
+</script>
