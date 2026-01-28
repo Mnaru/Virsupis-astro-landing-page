@@ -347,6 +347,11 @@ const { image1, image1Alt, image2, image2Alt, parallax = true, reversed = false 
   // Initialize on load
   initParallax();
 
+  // Refresh after layout settles (needed after footer reveal changes)
+  requestAnimationFrame(() => {
+    ScrollTrigger.refresh();
+  });
+
   // Reinitialize parallax on resize (handles desktop/mobile transitions)
   let resizeTimeout: ReturnType<typeof setTimeout>;
   window.addEventListener("resize", () => {
