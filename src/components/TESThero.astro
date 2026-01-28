@@ -55,7 +55,8 @@ const {
 
   @media (max-width: 768px) {
     .test-hero {
-      height: 100svh;
+      /* Use vh instead of svh - svh changes when mobile toolbar shows/hides, causing scroll jumps */
+      height: 100vh;
     }
 
     .test-hero-image {
@@ -63,7 +64,8 @@ const {
     }
 
     .test-hero-spacer {
-      height: 120svh;
+      /* Use vh instead of svh to prevent scroll position recalculation at footer */
+      height: 120vh;
     }
   }
 </style>
@@ -76,6 +78,8 @@ const {
 
   ScrollTrigger.config({
     ignoreMobileResize: true,
+    // Remove resize from auto-refresh to prevent scroll jumps on mobile toolbar show/hide
+    autoRefreshEvents: "visibilitychange,DOMContentLoaded,load",
   });
 
   const heroImage = document.querySelector('.test-hero-image');
