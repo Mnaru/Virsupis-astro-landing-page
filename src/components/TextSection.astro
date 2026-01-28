@@ -20,7 +20,7 @@ const { highlight, content } = Astro.props;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 120px 80px;
+    padding: 120px 24px;
     background-color: var(--color-white, #f8f4ee);
   }
 
@@ -29,15 +29,15 @@ const { highlight, content } = Astro.props;
     flex-direction: column;
     gap: 24px;
     width: 100%;
-    max-width: 425px;
+    max-width: 650px;
     text-align: left;
   }
 
   .highlight-text {
     font-family: var(--font-body, "General Sans", sans-serif);
     font-weight: 600;
-    font-size: 16px;
-    line-height: 20px;
+    font-size: 22px;
+    line-height: 1.2;
     color: var(--color-black, #161514);
     margin: 0;
     width: 100%;
@@ -46,26 +46,22 @@ const { highlight, content } = Astro.props;
   .body-text {
     font-family: var(--font-body, "General Sans", sans-serif);
     font-weight: 400;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 20px;
     color: var(--color-black, #161514);
     margin: 0;
     width: 100%;
   }
 
-  /* Slot content styling */
-  .text-content :global(p) {
+  /* Slot content styling - exclude highlight-text */
+  .text-content :global(p:not(.highlight-text):not(.body-text)) {
     font-family: var(--font-body, "General Sans", sans-serif);
     font-weight: 400;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 20px;
     color: var(--color-black, #161514);
     margin: 0;
     width: 100%;
-  }
-
-  .text-content :global(p:first-child) {
-    font-weight: 600;
   }
 
   /* Mobile responsive */
