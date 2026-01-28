@@ -58,7 +58,7 @@ const {
 
     .test-hero-bg {
       background-image: var(--mobile-bg);
-      background-size: contain;
+      background-size: cover;
       background-position: center bottom;
       transform: scale(1.05); /* Initial state for mobile zoom animation */
     }
@@ -66,7 +66,7 @@ const {
     .test-hero-spacer {
       /* Reduced height creates overlap effect without negative margins */
       /* Negative margins cause ScrollTrigger position miscalculations */
-      height: calc(var(--vh, 1vh) * 95 - 200px);
+      height: calc(var(--vh, 1vh) * 95 - 100px);
     }
   }
 </style>
