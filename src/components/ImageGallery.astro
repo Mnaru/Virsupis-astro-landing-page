@@ -305,14 +305,24 @@ const { image1, image1Alt, image2, image2Alt, parallax = true, reversed = false 
     ignoreMobileResize: true,
   });
 
+  // Store triggers for cleanup
+  let parallaxTriggers: ScrollTrigger[] = [];
+
   function initParallax() {
+    // Kill existing triggers first (cleanup on reinit)
+    parallaxTriggers.forEach((t) => t.kill());
+    parallaxTriggers = [];
+
+    // Only run parallax on desktop (matches CSS breakpoint where position: absolute is used)
+    if (window.innerWidth < 1024) return;
+
     const containers = document.querySelectorAll(".image-gallery .parallax-enabled");
 
     containers.forEach((container) => {
       const img = container.querySelector("img");
       if (!img) return;
 
-      gsap.fromTo(
+      const anim = gsap.fromTo(
         img,
         { yPercent: -7.5 },
         {
@@ -326,17 +336,23 @@ const { image1, image1Alt, image2, image2Alt, parallax = true, reversed = false 
           },
         }
       );
+
+      // Store the trigger for cleanup
+      if (anim.scrollTrigger) {
+        parallaxTriggers.push(anim.scrollTrigger);
+      }
     });
   }
 
   // Initialize on load
   initParallax();
 
-  // Refresh ScrollTrigger on resize
+  // Reinitialize parallax on resize (handles desktop/mobile transitions)
   let resizeTimeout: ReturnType<typeof setTimeout>;
   window.addEventListener("resize", () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
+      initParallax();
       ScrollTrigger.refresh();
     }, 100);
   });
