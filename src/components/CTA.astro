@@ -1,24 +1,19 @@
 ---
 interface Props {
-  text?: string;
-  backgroundImage?: string;
+  title?: string;
+  info?: string;
 }
 
 const {
-  text = "STATYBOS DARBAI PRADEDAMI 2026 BALANDĮ.",
-  backgroundImage = "/images/CTA bg.webp"
+  title = "Nuo 2026m. balandžio",
+  info = "Viršupio Sodų g. 2A   /   33 dvibučiai namai   /   79 - 162 m² namai   /   200 - 400 m² sklypai",
 } = Astro.props;
 ---
 
 <section class="cta-section">
-  <div class="cta-background">
-    <div class="cta-bg-color"></div>
-    <div class="cta-bg-image">
-      <img src={backgroundImage} alt="" loading="lazy" />
-    </div>
-  </div>
   <div class="cta-content">
-    <p class="cta-text">{text}</p>
+    <h2 class="cta-title">{title}</h2>
+    <p class="cta-info">{info}</p>
   </div>
 </section>
 
@@ -30,59 +25,42 @@ const {
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-    background-color: #e7e2da;
-    isolation: isolate;
-  }
-
-  .cta-background {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-
-  .cta-bg-color {
-    position: absolute;
-    inset: 0;
-    background-color: #e7e2da;
-  }
-
-  .cta-bg-image {
-    position: absolute;
-    inset: 0;
-    opacity: 1;
-    overflow: hidden;
-  }
-
-  .cta-bg-image img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    height: auto;
-    min-height: 100%;
-    object-fit: cover;
+    background-color: var(--color-white, #f8f4ee);
   }
 
   .cta-content {
-    position: relative;
-    z-index: 1;
-    max-width: 488px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
     padding: 0 24px;
     text-align: center;
   }
 
-  .cta-text {
-    text-align: center;
+  .cta-title {
     font-family: "General Sans", sans-serif;
-    font-size: 21px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 25px;
-    letter-spacing: 4.2px;
+    font-size: 53px;
+    font-weight: 500;
+    line-height: 1.1;
     color: var(--color-black, #161514);
     margin: 0;
+    max-width: 650px;
+  }
+
+  .cta-info {
+    font-family: "General Sans", sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--color-black, #161514);
+    margin: 0;
+    max-width: 650px;
+  }
+
+  /* Initial states for staggered animation */
+  .cta-title,
+  .cta-info {
+    opacity: 0;
   }
 
   /* Mobile responsive */
@@ -91,9 +69,55 @@ const {
       min-height: 600px;
     }
 
-    .cta-text {
-      font-size: 18px;
-      line-height: 22px;
+    .cta-title {
+      font-size: 32px;
+    }
+
+    .cta-info {
+      font-size: 13px;
+      padding: 0 52px;
     }
   }
 </style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const ctaSection = document.querySelector('.cta-section');
+  const ctaTitle = document.querySelector('.cta-title');
+  const ctaInfo = document.querySelector('.cta-info');
+
+  if (ctaSection && ctaTitle && ctaInfo) {
+    // Set initial states with y offset
+    gsap.set(ctaTitle, { opacity: 0, y: 30 });
+    gsap.set(ctaInfo, { opacity: 0, y: 20 });
+
+    // Create sequenced timeline
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: ctaSection,
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      }
+    });
+
+    // Title: elegant slide-up
+    tl.to(ctaTitle, {
+      opacity: 1,
+      y: 0,
+      duration: 1,
+      ease: 'power3.out',
+    });
+
+    // Info: follows title
+    tl.to(ctaInfo, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: 'power3.out',
+    }, '-=0.7');
+  }
+</script>

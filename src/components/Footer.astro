@@ -69,6 +69,13 @@ const currentYear = new Date().getFullYear();
     gap: 20px;
   }
 
+  /* Initial state for fade-in animation */
+  .footer-top,
+  .footer-logo-wrapper,
+  .footer-bottom {
+    opacity: 0;
+  }
+
   /* Top Row */
   .footer-top {
     display: flex;
@@ -233,4 +240,48 @@ const currentYear = new Date().getFullYear();
     }
   }
 </style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const footer = document.querySelector('.footer');
+  const footerTop = document.querySelector('.footer-top');
+  const footerLogo = document.querySelector('.footer-logo-wrapper');
+  const footerBottom = document.querySelector('.footer-bottom');
+
+  if (footer && footerTop && footerLogo && footerBottom) {
+    // Create timeline for subtle staggered fade
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: footer,
+        start: 'top 90%',
+        toggleActions: 'play none none none',
+      }
+    });
+
+    // Top section fades in first
+    tl.to(footerTop, {
+      opacity: 1,
+      duration: 0.8,
+      ease: 'power2.out',
+    });
+
+    // Logo follows
+    tl.to(footerLogo, {
+      opacity: 1,
+      duration: 0.8,
+      ease: 'power2.out',
+    }, '-=0.6');
+
+    // Bottom section last
+    tl.to(footerBottom, {
+      opacity: 1,
+      duration: 0.8,
+      ease: 'power2.out',
+    }, '-=0.6');
+  }
+</script>
 

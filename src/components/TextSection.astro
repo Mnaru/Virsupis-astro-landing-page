@@ -64,6 +64,13 @@ const { highlight, content } = Astro.props;
     width: 100%;
   }
 
+  /* Initial state for fade-in animation */
+  .highlight-text,
+  .body-text,
+  .text-content :global(p:not(.highlight-text):not(.body-text)) {
+    opacity: 0;
+  }
+
   /* Mobile responsive */
   @media (max-width: 768px) {
     .text-section {
@@ -78,36 +85,50 @@ const { highlight, content } = Astro.props;
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // Fade in for text section content
+  // Luxury staggered fade-in for text section content
   const textSections = document.querySelectorAll('.text-section');
   textSections.forEach((section) => {
+    const textContent = section.querySelector('.text-content');
     const highlightText = section.querySelector('.highlight-text');
-    const bodyText = section.querySelector('.body-text');
+    // Get all paragraphs (body-text, slot content)
+    const paragraphs = section.querySelectorAll('.text-content > p:not(.highlight-text)');
 
+    // Set initial states
     if (highlightText) {
-      gsap.from(highlightText, {
-        opacity: 0,
-        duration: 0.6,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: highlightText,
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        }
+      gsap.set(highlightText, { opacity: 0, y: 25 });
+    }
+    paragraphs.forEach(p => {
+      gsap.set(p, { opacity: 0, y: 20 });
+    });
+
+    // Create timeline for coordinated animation
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: textContent,
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      }
+    });
+
+    // Highlight text: elegant slide-up
+    if (highlightText) {
+      tl.to(highlightText, {
+        opacity: 1,
+        y: 0,
+        duration: 0.9,
+        ease: 'power3.out',
       });
     }
 
-    if (bodyText) {
-      gsap.from(bodyText, {
-        opacity: 0,
-        duration: 0.6,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: bodyText,
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        }
-      });
+    // Paragraphs: staggered cascade
+    if (paragraphs.length > 0) {
+      tl.to(paragraphs, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        stagger: 0.15,
+      }, highlightText ? '-=0.6' : 0);
     }
   });
 </script>

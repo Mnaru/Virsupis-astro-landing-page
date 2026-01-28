@@ -57,10 +57,16 @@ const {
     margin: 0;
   }
 
+  /* Initial state for fade-in animation */
+  .about-heading,
+  .about-description {
+    opacity: 0;
+  }
+
   /* Mobile responsive */
   @media (max-width: 768px) {
     .about-section {
-      padding: 80px 16px;
+      padding: 120px 16px;
     }
 
     .about-content {
@@ -87,33 +93,33 @@ const {
   const aboutDescription = document.querySelector('.about-description');
 
   if (aboutHeading && aboutDescription) {
-    // Set initial state - hidden
-    gsap.set([aboutHeading, aboutDescription], { opacity: 0, y: 20 });
+    // Set initial state - hidden with larger y offset for luxury feel
+    gsap.set([aboutHeading, aboutDescription], { opacity: 0, y: 30 });
 
     // Create a timeline for staggered animation
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: '.about-content',
-        start: 'top 80%',
+        start: 'top 85%',
         toggleActions: 'play none none none',
       }
     });
 
-    // Fade in heading with subtle upward movement
+    // Heading: elegant slide-up with longer duration
     tl.to(aboutHeading, {
       opacity: 1,
       y: 0,
-      duration: 0.8,
-      ease: 'power2.out',
+      duration: 1,
+      ease: 'power3.out',
     });
 
-    // Fade in description with slight delay
+    // Description: follows with deliberate delay
     tl.to(aboutDescription, {
       opacity: 1,
       y: 0,
-      duration: 0.8,
-      ease: 'power2.out',
-    }, '-=0.5');
+      duration: 1,
+      ease: 'power3.out',
+    }, '-=0.8');
   }
 
 </script>
