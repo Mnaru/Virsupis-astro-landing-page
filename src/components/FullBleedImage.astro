@@ -30,6 +30,8 @@ const { src, mobileSrc, alt, parallax = false, height = 850 } = Astro.props;
     overflow: hidden;
     background-color: #e5e0d8;
     position: relative;
+    transform-origin: center center;
+    will-change: transform;
   }
 
   .full-bleed-image img {
@@ -37,6 +39,8 @@ const { src, mobileSrc, alt, parallax = false, height = 850 } = Astro.props;
     height: 100%;
     object-fit: cover;
     object-position: center;
+    transform-origin: center;
+    will-change: transform;
   }
 
   /* Parallax mode: image stays fixed while content scrolls over */
@@ -53,5 +57,32 @@ const { src, mobileSrc, alt, parallax = false, height = 850 } = Astro.props;
     object-fit: cover;
     object-position: center;
     z-index: 0;
+    transform-origin: center center;
+    will-change: transform;
   }
 </style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const fullBleedSections = document.querySelectorAll('.full-bleed-image');
+
+  fullBleedSections.forEach((section) => {
+    gsap.fromTo(section,
+      { scale: 1 },
+      {
+        scale: 1.05,
+        duration: 3.5,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 15%',
+          toggleActions: 'play none none none',
+        }
+      }
+    );
+  });
+</script>

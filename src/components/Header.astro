@@ -167,13 +167,20 @@ import NavButton from "./NavButton.astro";
         top: getCollapsedTop(),
         left: '50%',
         xPercent: -50,
-        duration: 0.2,
+        duration: 0.35,
         ease: "power2.inOut",
         overwrite: true
       });
+      // Opacity pulse for smooth transition
+      gsap.to(logo, {
+        keyframes: [
+          { opacity: 0.4, duration: 0.175, ease: "power2.in" },
+          { opacity: 1, duration: 0.175, ease: "power2.out" }
+        ]
+      });
       gsap.to(headerInner, {
         height: getCollapsedHeight(),
-        duration: 0.2,
+        duration: 0.35,
         ease: "power2.inOut",
         overwrite: true
       });
@@ -186,13 +193,20 @@ import NavButton from "./NavButton.astro";
         top: 53,
         left: '50%',
         xPercent: -50,
-        duration: 0.2,
+        duration: 0.35,
         ease: "power2.inOut",
         overwrite: true
       });
+      // Opacity pulse for smooth transition
+      gsap.to(logo, {
+        keyframes: [
+          { opacity: 0.4, duration: 0.175, ease: "power2.in" },
+          { opacity: 1, duration: 0.175, ease: "power2.out" }
+        ]
+      });
       gsap.to(headerInner, {
         height: getExpandedHeight(),
-        duration: 0.2,
+        duration: 0.35,
         ease: "power2.inOut",
         overwrite: true
       });
@@ -212,7 +226,6 @@ import NavButton from "./NavButton.astro";
       ScrollTrigger.create({
         trigger: aboutSection,
         start: "top 15%",
-        markers: true,
         onEnter: () => {
           if (!isCollapsed) {
             isCollapsed = true;
