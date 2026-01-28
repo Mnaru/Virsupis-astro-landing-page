@@ -21,6 +21,7 @@
     -moz-osx-font-smoothing: grayscale;
     overscroll-behavior-x: none;
     overscroll-behavior-y: auto; /* Allow pull-to-refresh on mobile */
+    scrollbar-gutter: stable; /* Prevents layout shift from scrollbar appearing */
   }
 
   body {

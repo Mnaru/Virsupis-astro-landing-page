@@ -18,6 +18,14 @@ const { title, description = "Privatus namų kvartalas Vilniuje" } = Astro.props
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Preload critical font for hero navigation -->
+    <link
+      rel="preload"
+      href="https://fonts.gstatic.com/s/montserrat/v29/JTUSjIg1_i6t8kCHKm459WRhyzbi.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600;700&family=Roboto:wght@400;500&display=swap"
       rel="stylesheet"

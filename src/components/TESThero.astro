@@ -44,6 +44,7 @@ const {
     height: 100%;
     object-fit: cover;
     object-position: center;
+    transform: scale(1.05); /* Initial state for GSAP animation - prevents flash */
   }
 
   .test-hero-spacer {
@@ -81,9 +82,7 @@ const {
   const heroSpacer = document.querySelector('.test-hero-spacer');
 
   if (heroImage && heroSpacer) {
-    // Set initial zoom state
-    gsap.set(heroImage, { scale: 1.05 });
-
+    // Initial zoom state is set via CSS to prevent flash
     const testHero = document.querySelector('.test-hero');
 
     ScrollTrigger.matchMedia({
