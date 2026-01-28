@@ -257,3 +257,180 @@ The empty space between collapsed header and content is visually acceptable beca
 2. Test scroll behavior - content should not jump
 3. Verify header collapses/expands smoothly
 4. Test on both desktop and mobile
+
+---
+
+# Mobile Menu Implementation
+
+## Design Reference
+Based on Figma node 809:17
+
+- Background: cream (#f8f4ee)
+- Logo: 189px width, left aligned
+- Close icon: 32x32, right aligned
+- Menu items: right aligned, stacked vertically
+- Font: General Sans Medium, 21px, letter-spacing 4.2px
+- Gap between menu items: 32px
+
+## Implementation Steps
+
+### 1. Create Close Icon SVG
+**File:** `public/images/Close icon.svg`
+
+Simple X icon, 32x32, stroke color #161514
+
+### 2. Add Mobile Menu Overlay HTML
+**File:** `src/components/MobileHeader.astro`
+
+Add after the existing header:
+```html
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu-overlay" aria-hidden="true">
+  <div class="mobile-menu-header">
+    <div class="mobile-menu-logo-wrapper">
+      <img src="/images/logo.svg" alt="Viršupis" />
+    </div>
+    <button class="mobile-menu-close" aria-label="Close menu">
+      <img src="/images/Close icon.svg" alt="" />
+    </button>
+  </div>
+
+  <nav class="mobile-menu-nav">
+    <a href="#apie-nav" class="mobile-menu-item">APIE</a>
+    <a href="https://maps.app.goo.gl/VrLXHLc5Ni44R8rA6" class="mobile-menu-item" target="_blank">ADRESAS</a>
+    <a href="https://www.instagram.com/virsupis_vilnius/" class="mobile-menu-item" target="_blank">SEKTI</a>
+    <a href="mailto:mindaugas@virsupis.com" class="mobile-menu-item">SUSISIEKTI</a>
+  </nav>
+</div>
+```
+
+### 3. Add Menu Overlay Styles
+
+```css
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0;
+  z-index: 200;
+  background-color: #f8f4ee;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(24px + env(safe-area-inset-top, 0px)) 16px 16px;
+}
+
+.mobile-menu-logo-wrapper {
+  width: 189px;
+}
+
+.mobile-menu-close {
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.mobile-menu-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 32px;
+  padding: 42px 16px;
+}
+
+.mobile-menu-item {
+  font-family: "General Sans", sans-serif;
+  font-weight: 500;
+  font-size: 21px;
+  line-height: 1.1;
+  letter-spacing: 4.2px;
+  color: #161514;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(20px);
+}
+```
+
+### 4. GSAP Animations
+
+**Open menu:**
+```javascript
+function openMenu() {
+  document.body.style.overflow = 'hidden';
+
+  gsap.to(menuOverlay, {
+    height: '100dvh',
+    duration: 0.4,
+    ease: 'power2.out'
+  });
+
+  gsap.to(menuItems, {
+    opacity: 1,
+    y: 0,
+    duration: 0.3,
+    stagger: 0.1,
+    delay: 0.2,
+    ease: 'power2.out'
+  });
+}
+```
+
+**Close menu:**
+```javascript
+function closeMenu() {
+  gsap.to(menuItems, {
+    opacity: 0,
+    duration: 0.15,
+    ease: 'power2.in'
+  });
+
+  gsap.to(menuOverlay, {
+    height: 0,
+    duration: 0.3,
+    delay: 0.1,
+    ease: 'power2.in',
+    onComplete: () => {
+      document.body.style.overflow = '';
+      gsap.set(menuItems, { opacity: 0, y: 20 });
+    }
+  });
+}
+```
+
+### 5. Event Listeners
+- Menu button click → openMenu()
+- Close button click → closeMenu()
+- Menu item click → closeMenu() then navigate
+- Escape key → closeMenu()
+
+## Animation Timeline
+
+**Open:**
+- 0.0s - Overlay expands (0.4s)
+- 0.2s - First menu item fades in
+- 0.3s - Second menu item
+- 0.4s - Third menu item
+- 0.5s - Fourth menu item
+
+**Close:**
+- 0.0s - All items fade out (0.15s)
+- 0.1s - Overlay contracts (0.3s)
+
+## Verification
+- [ ] Menu button opens menu
+- [ ] Overlay expands from top
+- [ ] Items fade in with stagger
+- [ ] Close button closes menu
+- [ ] Overlay contracts to top
+- [ ] Body scroll locked when open
+- [ ] Escape closes menu
+- [ ] Item click closes and navigates
