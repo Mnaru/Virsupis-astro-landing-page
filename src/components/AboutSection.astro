@@ -123,14 +123,12 @@ const {
     }, '-=0.8');
   }
 
-  // Padding extension animation - section grows upward while content stays in place
+  // Padding extension animation - desktop only
   const aboutSection = document.querySelector('.about-section') as HTMLElement;
-  const aboutContent = document.querySelector('.about-content') as HTMLElement;
+  const isMobile = window.innerWidth <= 768;
 
-  if (aboutSection && aboutContent) {
-    // Get current padding based on viewport
-    const isMobile = window.innerWidth <= 768;
-    const startPadding = isMobile ? 120 : 200;
+  if (aboutSection && !isMobile) {
+    const startPadding = 200;
     const endPadding = startPadding + 500;
 
     ScrollTrigger.create({
