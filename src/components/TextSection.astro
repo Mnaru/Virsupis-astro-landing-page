@@ -115,7 +115,7 @@ const { highlight, content } = Astro.props;
       tl.to(highlightText, {
         opacity: 1,
         y: 0,
-        duration: 0.9,
+        duration: 0.45,
         ease: 'power3.out',
       });
     }
@@ -125,10 +125,10 @@ const { highlight, content } = Astro.props;
       tl.to(paragraphs, {
         opacity: 1,
         y: 0,
-        duration: 0.8,
+        duration: 0.4,
         ease: 'power3.out',
         stagger: 0.15,
-      }, highlightText ? '-=0.6' : 0);
+      }, highlightText ? '-=0.3' : 0);
     }
   });
 </script>

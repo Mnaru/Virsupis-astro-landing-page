@@ -11,7 +11,7 @@ const {
 ---
 
 <section id="apie" class="about-section">
-  <div class="about-content">
+  <div id="apie-nav" class="about-content">
     <h2 class="about-heading">{heading}</h2>
     <p class="about-description">{description}</p>
   </div>
@@ -37,6 +37,7 @@ const {
     gap: 32px;
     max-width: 650px;
     width: 100%;
+    scroll-margin-top: 25vh; /* Centers content when scrolling via anchor */
   }
 
   .about-heading {
@@ -120,6 +121,39 @@ const {
       duration: 1,
       ease: 'power3.out',
     }, '-=0.8');
+  }
+
+  // Padding extension animation - section grows upward while content stays in place
+  const aboutSection = document.querySelector('.about-section') as HTMLElement;
+  const aboutContent = document.querySelector('.about-content') as HTMLElement;
+
+  if (aboutSection && aboutContent) {
+    // Get current padding based on viewport
+    const isMobile = window.innerWidth <= 768;
+    const startPadding = isMobile ? 120 : 200;
+    const endPadding = startPadding + 500;
+
+    ScrollTrigger.create({
+      trigger: aboutSection,
+      start: "top 25%",
+      markers: true,
+      onEnter: () => {
+        gsap.to(aboutSection, {
+          marginTop: -500,
+          paddingTop: endPadding,
+          duration: 0.5,
+          ease: "power2.out"
+        });
+      },
+      onLeaveBack: () => {
+        gsap.to(aboutSection, {
+          marginTop: 0,
+          paddingTop: startPadding,
+          duration: 0.5,
+          ease: "power2.out"
+        });
+      }
+    });
   }
 
 </script>

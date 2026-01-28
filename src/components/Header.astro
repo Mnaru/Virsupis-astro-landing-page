@@ -7,7 +7,7 @@ import NavButton from "./NavButton.astro";
   <div id="header-inner" class="header-inner">
     <!-- Menu items positioned absolutely - they never move (hidden on mobile) -->
     <nav class="nav-left" aria-label="Pagrindinė navigacija">
-      <NavButton href="#apie" label="Apie" />
+      <NavButton href="#apie-nav" label="Apie" />
       <NavButton href="https://maps.app.goo.gl/VrLXHLc5Ni44R8rA6" label="Adresas" external={true} />
     </nav>
 
@@ -167,13 +167,13 @@ import NavButton from "./NavButton.astro";
         top: getCollapsedTop(),
         left: '50%',
         xPercent: -50,
-        duration: 0.3,
+        duration: 0.2,
         ease: "power2.inOut",
         overwrite: true
       });
       gsap.to(headerInner, {
         height: getCollapsedHeight(),
-        duration: 0.3,
+        duration: 0.2,
         ease: "power2.inOut",
         overwrite: true
       });
@@ -186,13 +186,13 @@ import NavButton from "./NavButton.astro";
         top: 53,
         left: '50%',
         xPercent: -50,
-        duration: 0.3,
+        duration: 0.2,
         ease: "power2.inOut",
         overwrite: true
       });
       gsap.to(headerInner, {
         height: getExpandedHeight(),
-        duration: 0.3,
+        duration: 0.2,
         ease: "power2.inOut",
         overwrite: true
       });
