@@ -167,13 +167,15 @@ import NavButton from "./NavButton.astro";
         top: getCollapsedTop(),
         left: '50%',
         xPercent: -50,
-        duration: 0.5,
-        ease: "power2.inOut"
+        duration: 0.3,
+        ease: "power2.inOut",
+        overwrite: true
       });
       gsap.to(headerInner, {
         height: getCollapsedHeight(),
-        duration: 0.5,
-        ease: "power2.inOut"
+        duration: 0.3,
+        ease: "power2.inOut",
+        overwrite: true
       });
     };
 
@@ -184,13 +186,15 @@ import NavButton from "./NavButton.astro";
         top: 53,
         left: '50%',
         xPercent: -50,
-        duration: 0.5,
-        ease: "power2.inOut"
+        duration: 0.3,
+        ease: "power2.inOut",
+        overwrite: true
       });
       gsap.to(headerInner, {
         height: getExpandedHeight(),
-        duration: 0.5,
-        ease: "power2.inOut"
+        duration: 0.3,
+        ease: "power2.inOut",
+        overwrite: true
       });
     };
 
@@ -207,7 +211,8 @@ import NavButton from "./NavButton.astro";
       // Triggers when top of #apie reaches 8% from top of viewport
       ScrollTrigger.create({
         trigger: aboutSection,
-        start: "top 8%",
+        start: "top 15%",
+        markers: true,
         onEnter: () => {
           if (!isCollapsed) {
             isCollapsed = true;
@@ -229,7 +234,7 @@ import NavButton from "./NavButton.astro";
       // Check if already scrolled past trigger on page load (after refresh)
       requestAnimationFrame(() => {
         const rect = aboutSection.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.08) {
+        if (rect.top < window.innerHeight * 0.15) {
           isCollapsed = true;
           gsap.set(logo, { width: getCollapsedLogoWidth(), top: getCollapsedTop(), left: '50%', xPercent: -50 });
           gsap.set(headerInner, { height: getCollapsedHeight() });

@@ -5,8 +5,8 @@ interface Props {
 }
 
 const {
-  heading = "Apie projektą",
-  description = `Pastatyti namą ir sukurti namus — dvi skirtingos ambicijos. „Kai pradedi namus vertinti pagal tualetų skaičių — jau lauk bėdos", sako Mindaugas Plisas, Viršupio projekto autorius. Anot jo, tobuli namai nėra tie, kurie uždaro gyventojus išpuoselėtoje pilaitėje, atriboję nuo kaimynų ir supančio pasaulio. Namai turi kurti ryšį, o ne izoliuoti. Apie tai ir kalbamės.`
+  heading = "Mindaugas Plisas: pastatyti namą ir sukurti namus — dvi radikaliai skirtingos ambicijos",
+  description = `„Kai pradedi namus vertinti pagal tualetų skaičių — jau lauk bėdos", sako Mindaugas Plisas, Viršupio projekto autorius. Anot jo, tobuli namai nėra tie, kurie uždaro gyventojus išpuoselėtoje pilaitėje, atriboję nuo kaimynų ir supančio pasaulio. Namai turi kurti ryšį, o ne izoliuoti. Apie tai ir kalbamės toliau.`
 } = Astro.props;
 ---
 
@@ -23,41 +23,36 @@ const {
     position: relative;
     z-index: 2;
     background-color: var(--color-white, #f8f4ee);
-    height: 750px;
-    padding: 90px 24px;
+    padding: 200px 24px 150px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 64px;
-    text-align: center;
   }
 
   .about-content {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     gap: 32px;
-    max-width: 854px;
+    max-width: 650px;
     width: 100%;
   }
 
   .about-heading {
     font-family: "General Sans", sans-serif;
-    font-weight: 700;
-    font-size: 21px;
-    line-height: 1;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 43px;
+    line-height: 1.1;
     color: var(--color-black, #161514);
     margin: 0;
   }
 
   .about-description {
-    font-family: var(--font-body, "General Sans", sans-serif);
+    font-family: "General Sans", sans-serif;
     font-weight: 400;
-    font-size: 16px;
-    line-height: normal;
+    font-size: 22px;
+    line-height: 1.2;
     color: var(--color-black, #161514);
     margin: 0;
   }
@@ -65,8 +60,7 @@ const {
   /* Mobile responsive */
   @media (max-width: 768px) {
     .about-section {
-      padding: 64px 16px;
-      gap: 48px;
+      padding: 80px 16px;
     }
 
     .about-content {
@@ -74,6 +68,10 @@ const {
     }
 
     .about-heading {
+      font-size: 28px;
+    }
+
+    .about-description {
       font-size: 18px;
     }
   }
@@ -85,34 +83,37 @@ const {
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // Fade in for heading
   const aboutHeading = document.querySelector('.about-heading');
-  if (aboutHeading) {
-    gsap.from(aboutHeading, {
-      opacity: 0,
-      duration: 0.6,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: aboutHeading,
-        start: 'top 85%',
-        toggleActions: 'play none none none',
-      }
-    });
-  }
-
-  // Fade in for description text
   const aboutDescription = document.querySelector('.about-description');
-  if (aboutDescription) {
-    gsap.from(aboutDescription, {
-      opacity: 0,
-      duration: 0.6,
-      ease: 'power2.out',
+
+  if (aboutHeading && aboutDescription) {
+    // Set initial state - hidden
+    gsap.set([aboutHeading, aboutDescription], { opacity: 0, y: 20 });
+
+    // Create a timeline for staggered animation
+    const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: aboutDescription,
-        start: 'top 85%',
+        trigger: '.about-content',
+        start: 'top 80%',
         toggleActions: 'play none none none',
       }
     });
+
+    // Fade in heading with subtle upward movement
+    tl.to(aboutHeading, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: 'power2.out',
+    });
+
+    // Fade in description with slight delay
+    tl.to(aboutDescription, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: 'power2.out',
+    }, '-=0.5');
   }
 
 </script>
