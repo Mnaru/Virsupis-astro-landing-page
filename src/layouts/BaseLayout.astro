@@ -29,6 +29,14 @@ const { title, description = "Privatus namų kvartalas Vilniuje" } = Astro.props
       href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap"
       rel="stylesheet"
     />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JBK2867FP6" is:inline></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JBK2867FP6');
+    </script>
     <title>{title}</title>
     <slot name="head" />
   </head>
