@@ -4,9 +4,12 @@ import "../styles/global.css";
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
 }
 
-const { title, description = "Privatus namų kvartalas Vilniuje" } = Astro.props;
+const { title, description = "Privatus namų kvartalas Vilniuje", ogImage = "/images/Hero image.webp" } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(ogImage, Astro.site);
 ---
 
 <!doctype html>
@@ -15,6 +18,52 @@ const { title, description = "Privatus namų kvartalas Vilniuje" } = Astro.props
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content={description} />
+
+    <!-- Canonical & Language -->
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" hreflang="lt" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="lt_LT" />
+    <meta property="og:site_name" content="Viršupis" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <!-- Organization Schema (JSON-LD) -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Viršupis",
+      "url": "https://www.virsupis.com",
+      "logo": "https://www.virsupis.com/images/logo.svg",
+      "description": "Privatus namų kvartalas Antakalnyje, Vilniuje. 32 dvibučiai namai šalia Pavilnių regioninio parko.",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "mindaugas@virsupis.com",
+        "contactType": "sales",
+        "availableLanguage": ["Lithuanian", "English"]
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Viršupio Sodų g. 2A",
+        "addressLocality": "Vilnius",
+        "addressRegion": "Vilniaus apskritis",
+        "addressCountry": "LT"
+      },
+      "sameAs": [
+        "https://www.instagram.com/virsupis_vilnius/"
+      ]
+    })} />
+
     <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
     <link rel="shortcut icon" href="/favicon/favicon.ico" />
